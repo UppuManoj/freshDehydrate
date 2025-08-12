@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - FreshDehydrate</title>
+    
+    <!-- favicon-->
+   <link rel = "icon" type ="image/png" href="../assets/logo.png">
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <link rel="stylesheet" href="../css/products.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <!-- Navigation will be loaded here -->
+    <div id="navbar"></div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+            <button class="close-cart" onclick="closeCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="cart-content">
+            <div id="cart-items-container">
+                <!-- Cart items will be loaded here -->
+            </div>
+
+            <div id="empty-cart-message" class="empty-cart-message" style="display: none;">
+                <i class="fas fa-shopping-cart fa-3x"></i>
+                <h4>Your cart is empty</h4>
+                <p>Add some delicious dehydrated products to get started!</p>
+            </div>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cart-subtotal">₹0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span id="cart-shipping">₹0.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="cart-total">₹0.00</span>
+                </div>
+            </div>
+
+            <div class="cart-actions">
+                <button class="btn btn-outline-danger btn-sm w-100 mb-2" onclick="clearAllCart()">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+                <button class="btn btn-outline-secondary btn-sm w-100 mb-2" onclick="closeCart()">
+                    Continue shopping
+                </button>
+                <button class="btn btn-success w-100" id="checkout-btn" onclick="proceedToCheckout()">
+                    Check out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+
+
+
+
+    <!-- Enhanced Products Header -->
+    <section class="products-header py-5">
+        <div class="hero-background"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div class="hero-content">
+                        <h1 class="display-3 fw-bold text-white mb-3 animate-fade-in">
+                            <i class="fas fa-lemon"></i>Premium Dehydrated Products Collection
+                        </h1>
+                        <p class="lead text-white-50 mb-4 animate-fade-in-delay">
+                            Discover our exclusive range of dehydrated products
+
+                        </p>
+                        <div class="hero-stats animate-fade-in-delay-2">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="stat-item">
+                                        <h3 class="text-white fw-bold">80+</h3>
+                                        <p class="text-white-50 mb-0">Products</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="stat-item">
+                                        <h3 class="text-white fw-bold">24/7</h3>
+                                        <p class="text-white-50 mb-0">Support</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="stat-item">
+                                        <h3 class="text-white fw-bold">4.9★</h3>
+                                        <p class="text-white-50 mb-0">Rating</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="hero-actions animate-fade-in-delay-3">
+                        <button class="btn btn-light btn-lg me-3 mb-3" onclick="openCart()">
+                            <i class="fas fa-shopping-cart me-2"></i>View Cart
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Products Header -->
+
+
+    <!-- Promotional Banner -->
+    <div class="promo-banner">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <span class="promo-text">
+                        🚚 Free Delivery ₹499+ | 💸 10% OFF ₹749+ with FRESH10 | 🎁 15% OFF + Gift ₹2000+ with FRESH15
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section class="products-section py-5">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by product name..." />
+                </div>
+            </div>
+            <!-- Filters -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="filters-wrapper">
+                        <h5 class="fw-bold mb-3">Filters</h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-outline-success btn-sm filter-btn active" data-filter="all">All
+                                Products</button>
+                            <button class="btn btn-outline-success btn-sm filter-btn"
+                                data-filter="fruits">Fruits</button>
+                            <button class="btn btn-outline-success btn-sm filter-btn"
+                                data-filter="vegetables">Vegetables</button>
+                            <button class="btn btn-outline-success btn-sm filter-btn"
+                                data-filter="blends">Blends</button>
+                            <button class="btn btn-outline-success btn-sm filter-btn"
+                                data-filter="powder">Powder</button>
+                            <button class="btn btn-outline-success btn-sm filter-btn"
+                                data-filter="organic">Organic</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 text-lg-end">
+                    <select class="form-select w-auto" id="sortSelect">
+                        <option value="popularity">Sort by Popularity</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Sort by Rating</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <!-- Products Grid -->
+            <div class="row g-4" id="productsGrid">
+                <!-- Product 1: Dehydrated Apple Slices -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="fruits">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/apple-slices.jpg" alt="Dehydrated Apple Slices" class="img-fluid">
+                            <div class="product-badge">Best Seller</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Fruits</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Apple Slices</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.8)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹299</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹399</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">25% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">100% Natural</span>
+                                <span class="badge bg-light text-dark me-1">No Preservatives</span>
+                                <span class="badge bg-light text-dark">250g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="1"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2: Dehydrated Banana Chips -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="fruits">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/banana-chips.jpeg" alt="Dehydrated Banana Chips" class="img-fluid">
+                            <div class="product-badge organic">Organic</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Fruits</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Banana Chips</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="far fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.2)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹199</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹249</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">20% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Organic</span>
+                                <span class="badge bg-light text-dark me-1">Gluten Free</span>
+                                <span class="badge bg-light text-dark">100g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="2"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3: Dehydrated Carrot Sticks -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="vegetables">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/carrot-slices.jpg" alt="Dehydrated Carrot Sticks" class="img-fluid">
+                            <div class="product-badge">New</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Vegetables</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Carrot Sticks</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.9)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹179</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹229</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">22% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Rich in Vitamin A</span>
+                                <span class="badge bg-light text-dark me-1">No Added Sugar</span>
+                                <span class="badge bg-light text-dark">300g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="3"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4: Dehydrated Mango Slices -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="fruits">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/Mango-slices.jpeg" alt="Dehydrated Mango Slices" class="img-fluid">
+                            <div class="product-badge organic">Organic</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Fruits</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Mango Slices</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.7)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹349</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹449</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">22% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Organic</span>
+                                <span class="badge bg-light text-dark me-1">Sweet & Tangy</span>
+                                <span class="badge bg-light text-dark">200g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="4"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5: Dehydrated Tomato Powder -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="vegetables">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/tomato slices.jpg" alt="Dehydrated Tomato Powder" class="img-fluid">
+                            <div class="product-badge">Premium</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Vegetables</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Tomato Slices</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="far fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.3)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹129</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹179</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">28% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Cooking Ingredient</span>
+                                <span class="badge bg-light text-dark me-1">Rich Flavor</span>
+                                <span class="badge bg-light text-dark">100g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="5"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6: Dehydrated Strawberry Slices -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="fruits">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/strawberry-slices.jpg" alt="Dehydrated Strawberry Slices"
+                                class="img-fluid">
+                            <div class="product-badge organic">Organic</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Fruits</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Strawberry Slices</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.6)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹399</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹499</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">20% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Organic</span>
+                                <span class="badge bg-light text-dark me-1">Antioxidant Rich</span>
+                                <span class="badge bg-light text-dark">150g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="6"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 7: Dehydrated Onion Flakes -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="vegetables">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/onion flakes.jpg" alt="Dehydrated Onion Flakes" class="img-fluid">
+                            <div class="product-badge">Bulk Pack</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Vegetables</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Onion Flakes</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="far fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.1)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹89</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹119</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">25% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Cooking Essential</span>
+                                <span class="badge bg-light text-dark me-1">Long Shelf Life</span>
+                                <span class="badge bg-light text-dark">500g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="7"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 8: Dehydrated Pineapple Rings -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="fruits">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/pineapple-rings.jpg" alt="Dehydrated Pineapple Rings" class="img-fluid">
+                            <div class="product-badge">Tropical</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Fruits</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Pineapple Rings</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.5)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹279</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹349</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">20% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Tropical Flavor</span>
+                                <span class="badge bg-light text-dark me-1">Vitamin C Rich</span>
+                                <span class="badge bg-light text-dark">200g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="8"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 9: Dehydrated Bell Pepper Mix -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="vegetables">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/pepper mix.jpg" alt="Dehydrated Bell Pepper Mix" class="img-fluid">
+                            <div class="product-badge organic">Organic</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Vegetables</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Bell Pepper Mix</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="far fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.0)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹159</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹199</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">20% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Organic</span>
+                                <span class="badge bg-light text-dark me-1">Colorful Mix</span>
+                                <span class="badge bg-light text-dark">250g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="9"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 10: Dehydrated Coconut Chips -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="fruits">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/Coconut-Chips.jpg" alt="Dehydrated Coconut Chips" class="img-fluid">
+                            <div class="product-badge">Premium</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Fruits</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Coconut Chips</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.4)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹189</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹239</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">21% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Healthy Fats</span>
+                                <span class="badge bg-light text-dark me-1">Natural Sweetness</span>
+                                <span class="badge bg-light text-dark">200g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="10"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 11: Dehydrated Mixed Vegetables -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="blends">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/mixed vegetables.jpeg" alt="Dehydrated Mixed Vegetables"
+                                class="img-fluid">
+                            <div class="product-badge">Value Pack</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Blends</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Mixed Vegetables</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="far fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.2)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹249</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹329</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">24% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">6 Vegetables</span>
+                                <span class="badge bg-light text-dark me-1">Soup Mix</span>
+                                <span class="badge bg-light text-dark">500g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="11"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 12: Dehydrated Mixed Fruits -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="blends">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/mixed fruits.jpg" alt="Dehydrated Mixed Fruits" class="img-fluid">
+                            <div class="product-badge organic">Organic</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Blends</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Mixed Fruits</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.7)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹399</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹499</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">20% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Organic</span>
+                                <span class="badge bg-light text-dark me-1">5 Fruits Mix</span>
+                                <span class="badge bg-light text-dark">300g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="12"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 13: Dehydrated Ginger Powder -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="vegetables">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/ginger flakes.jpg" alt="Dehydrated Ginger Powder" class="img-fluid">
+                            <div class="product-badge">Ayurvedic</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Vegetables</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Ginger Flakes</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="far fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.3)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹99</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹129</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">23% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Ayurvedic</span>
+                                <span class="badge bg-light text-dark me-1">Digestive Health</span>
+                                <span class="badge bg-light text-dark">100g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="13"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 14: Dehydrated Blueberry Mix -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="fruits">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="https://images.unsplash.com/photo-1498557850523-fd3d118b962e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                                alt="Dehydrated Blueberry Mix" class="img-fluid">
+                            <div class="product-badge organic">Organic</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Fruits</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Blueberry Mix</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.8)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹449</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹549</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">18% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Organic</span>
+                                <span class="badge bg-light text-dark me-1">Superfood</span>
+                                <span class="badge bg-light text-dark">150g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="14"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 15: Dehydrated Tomato Powder -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="powder">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/banana powder.jpg" alt="Dehydrated Tomato Powder" class="img-fluid">
+                            <div class="product-badge">Premium</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Fruits</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Banana Powder</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="far fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.3)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹169</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹199</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">15% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Cooking Ingredient</span>
+                                <span class="badge bg-light text-dark me-1">Rich Flavor</span>
+                                <span class="badge bg-light text-dark">100g Pack</span>
+                            </div>
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="15"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Product 16: Dehydrated Herbs Mix -->
+                <div class="col-md-6 col-lg-4 col-xl-3 product-item" data-category="blends">
+                    <div class="product-card h-100">
+                        <div class="product-image">
+                            <img src="/assets/mixed herbs.jpg" alt="Dehydrated Herbs Mix" class="img-fluid">
+                            <div class="product-badge">Gourmet</div>
+                            <div class="product-actions">
+                                <button class="btn btn-sm btn-light" title="Add to Wishlist"><i
+                                        class="fas fa-heart"></i></button>
+                                <button class="btn btn-sm btn-light" title="Quick View"><i
+                                        class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-details p-3">
+                            <div class="product-category text-muted small">Blends</div>
+                            <h5 class="product-title fw-bold mb-2">Dehydrated Herbs Mix</h5>
+                            <div class="product-rating mb-2">
+                                <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
+                                    class="far fa-star text-warning"></i>
+                                <span class="ms-1 text-muted small">(4.1)</span>
+                            </div>
+                            <div class="product-price mb-3">
+                                <span class="current-price fw-bold text-success">₹179</span>
+                                <span class="original-price text-muted text-decoration-line-through ms-2">₹229</span>
+                                <span class="discount-badge bg-danger text-white small ms-2">22% OFF</span>
+                            </div>
+                            <div class="product-features mb-3">
+                                <span class="badge bg-light text-dark me-1">Gourmet</span>
+                                <span class="badge bg-light text-dark me-1">Italian Blend</span>
+                                <span class="badge bg-light text-dark">100g Pack</span>
+                            </div>
+
+                            <button class="btn btn-success w-100 add-to-cart-btn" data-product-id="14"><i
+                                    class="fas fa-shopping-cart me-2"></i>Add to
+                                Cart</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="row mt-5">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-outline-success btn-lg px-5" id="loadMoreBtn">
+                            <i class="fas fa-plus me-2"></i>Load More Products
+                        </button>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Load footer dynamically -->
+    <div id="footer"></div>
+
+    <!-- Load component loader script -->
+    <script src="../js/index.js"></script>
+    <script src="../js/products.js"></script>
+
+
+
+</body>
+
+</html>
