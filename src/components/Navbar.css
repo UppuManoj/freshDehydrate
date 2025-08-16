@@ -1,0 +1,274 @@
+/* Navbar.css */
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.navbar {
+  animation: slideInDown 0.5s ease-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff; /* White background */
+  color: #333; /* Dark text color */
+  flex-wrap: wrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-bottom: 1px solid #e9e9e9;
+  z-index: 1000;
+}
+
+.navbar-brand a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Style for the 'Fresh' part of the logo */
+.navbar-brand .logo-fresh {
+  color: #28a745; /* Green color */
+}
+
+
+.navbar-left, .navbar-center, .navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-left {
+  gap: 1rem;
+}
+
+.navbar-center {
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.navbar-right {
+  gap: 1.5rem;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover,
+.navbar-links .active-link {
+  color: #28a745; /* Green on hover/active */
+}
+
+.navbar-links .active-link {
+  font-weight: bold;
+  position: relative;
+}
+
+.navbar-links .active-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 2px;
+  background-color: #28a745;
+}
+
+.navbar-search {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-search input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  border-right: none;
+}
+
+.navbar-search button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #28a745;
+  background-color: #28a745;
+  color: white;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.navbar-search button:hover {
+  background-color: #218838;
+  border-color: #218838;
+}
+
+.navbar-icons {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.icon-link {
+  color: #333;
+  font-size: 1.5rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.icon-link:hover {
+  color: #28a745;
+  transform: scale(1.1);
+}
+
+.profile-icon-button {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0;
+}
+
+.profile-icon-button:hover {
+  color: #28a745;
+}
+
+.login-button-navbar {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.login-button-navbar:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.login-button-navbar:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cart-icon-container,
+.favorites-icon-container {
+  position: relative;
+}
+
+.cart-count,
+.favorites-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #e74c3c; /* A softer red */
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 2px solid #fff; /* White border for contrast */
+}
+
+
+.menu-icon {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  order: -1; /* Ensure it comes first in flex layout on mobile */
+}
+
+/* Responsive Design */
+/* Mobile Menu Styles */
+.mobile-menu {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: -100%; /* Start off-screen */
+  width: 80%;
+  max-width: 300px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  transition: left 0.3s ease-in-out;
+  z-index: 1001; /* Above navbar but below overlay */
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.mobile-menu.active {
+  left: 0; /* Slide in */
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-menu-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.close-icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+@media (max-width: 850px) {
+  .navbar-center {
+    display: none; /* Hide center links on mobile */
+  }
+
+  .menu-icon {
+    display: block; /* Show hamburger */
+  }
+
+  .mobile-menu {
+    display: flex; /* Use flex for alignment */
+  }
+
+  .mobile-menu .navbar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left;
+    width: 100%;
+  }
+}

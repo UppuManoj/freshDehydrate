@@ -1,0 +1,138 @@
+/* Home.css */
+
+.home-container {
+  text-align: center;
+}
+
+.hero-section {
+  padding: 60px 20px;
+  background-color: #40b416; /* White background */
+}
+
+.hero-content h1 {
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: #343a40; /* Darker gray for text */
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  color: #6c757d; /* Softer gray for subtext */
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #28a745; /* Green color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.features-section {
+  padding: 60px 20px;
+}
+
+.features-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+  color: #343a40;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-item {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.feature-item h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #28a745; /* Green color */
+}
+
+.feature-item p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #6c757d;
+}
+
+.call-to-action-section {
+  background-color: #f8f9fa; /* Light gray to separate sections */
+  color: #333;
+  padding: 60px 20px;
+}
+
+.call-to-action-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.call-to-action-section p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #6c757d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 40px 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .features-section h2, .call-to-action-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .feature-item {
+    padding: 20px;
+  }
+
+  .call-to-action-section {
+    padding: 40px 20px;
+  }
+
+  .call-to-action-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .call-to-action-section p {
+    font-size: 1rem;
+  }
+}
