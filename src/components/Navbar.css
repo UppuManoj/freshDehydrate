@@ -22,16 +22,20 @@
   padding: 1rem 2rem;
   background-color: #fff; /* White background */
   color: #333; /* Dark text color */
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Changed from wrap to nowrap to prevent wrapping on small screens */
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   border-bottom: 1px solid #e9e9e9;
   z-index: 1000;
+  min-width: 280px; /* Ensure navbar doesn't get too small */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .navbar-brand a {
   color: #333;
   text-decoration: none;
   font-weight: bold;
+  white-space: nowrap; /* Prevent text wrapping */
+  font-size: 1.2rem; /* Base font size */
 }
 
 /* Style for the 'Fresh' part of the logo */
@@ -43,6 +47,7 @@
 .navbar-left, .navbar-center, .navbar-right {
   display: flex;
   align-items: center;
+  flex-shrink: 0; /* Prevent shrinking on small screens */
 }
 
 .navbar-left {
@@ -207,7 +212,7 @@
   position: fixed;
   top: 0;
   left: -100%; /* Start off-screen */
-  width: 80%;
+  width: 85%; /* Slightly wider on small screens */
   max-width: 300px;
   height: 100%;
   background-color: #fff;
@@ -252,23 +257,52 @@
 }
 
 @media (max-width: 850px) {
+  .navbar {
+    padding: 0.75rem 1rem; /* Reduced padding for mobile */
+  }
+
+  .navbar-brand a {
+    font-size: 1.1rem; /* Slightly smaller font for mobile */
+  }
+
   .navbar-center {
     display: none; /* Hide center links on mobile */
   }
 
   .menu-icon {
     display: block; /* Show hamburger */
+    font-size: 1.3rem; /* Slightly smaller icon */
   }
 
   .mobile-menu {
     display: flex; /* Use flex for alignment */
+    width: 85%; /* Slightly narrower on very small screens */
   }
 
   .mobile-menu .navbar-links {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem; /* Slightly reduced gap */
     text-align: left;
     width: 100%;
+  }
+
+  .navbar-icons {
+    gap: 1rem; /* Reduced gap between icons */
+  }
+
+  .icon-link {
+    font-size: 1.3rem; /* Slightly smaller icons */
+  }
+
+  .login-button-navbar {
+    padding: 0.4rem 0.8rem; /* Slightly smaller button */
+    font-size: 0.9rem;
+  }
+
+  .cart-count,
+  .favorites-count {
+    font-size: 0.65rem; /* Slightly smaller count badges */
+    padding: 1px 4px;
   }
 }
