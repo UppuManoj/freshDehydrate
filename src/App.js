@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Home from './pages/Home';
 import About from './pages/About';
 import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
 import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import Favorites from './pages/Favorites';
@@ -53,6 +54,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/products" element={<Products onAddToCart={addToCart} onToggleFavorite={toggleFavorite} favorites={favorites} />} />
+            <Route path="/products/:id" element={<ProductDetail onAddToCart={addToCart} />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Cart cart={cart} setCart={setCart} isLoggedIn={isLoggedIn} onLoginClick={() => setShowLogin(true)} setShowLogin={setShowLogin} onLogout={handleLogout} />} />
             <Route path="/favorites" element={<Favorites favorites={favorites} onToggleFavorite={toggleFavorite} onAddToCart={addToCart} />} />

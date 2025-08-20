@@ -1,76 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { FaShoppingCart, FaRegHeart, FaHeart, FaStar, FaStarHalfAlt, FaBoxOpen, FaHeadset } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import './Products.css';
-import productBg from '../assets/product-bg.jpg';
-import mixedFruits from '../assets/mixed fruits.jpg';
-import dehydrated from '../assets/dehydrated.jpg';
-import bananaChips from '../assets/banana-chips.jpeg';
-import mixedVegetables from '../assets/mixed vegetables.jpeg';
-import bananaPowder from '../assets/banana powder.jpg';
-
-const productsData = [
-  {
-    id: 1,
-    name: 'Antioxidant Berry Mix',
-    image: mixedFruits,
-    price: 189.00,
-    originalPrice: 259.00,
-    rating: 4.8,
-    category: 'Fruits',
-    description: 'A powerful blend of dehydrated blueberries, cranberries, and goji berries.'
-  },
-  {
-    id: 2,
-    name: 'Crispy Kale Chips',
-    image: dehydrated,
-    price: 109.00,
-    originalPrice: 159.00,
-    rating: 4.4,
-    category: 'Vegetables',
-    description: 'Lightly seasoned kale chips, a perfect guilt-free snack.'
-  },
-  {
-    id: 3,
-    name: 'Crunchy Banana Chips',
-    image: bananaChips,
-    price: 99.00,
-    originalPrice: 119.00,
-    rating: 4.6,
-    category: 'Fruits',
-    description: 'Naturally sweet banana chips that make the perfect healthy snack for any time.'
-  },
-  {
-    id: 4,
-    name: 'Garden Vegetable Mix',
-    image: mixedVegetables,
-    price: 129.00,
-    originalPrice: 159.00,
-    rating: 4.9,
-    category: 'Vegetables',
-    description: 'A colorful blend of bell peppers, carrots, and tomatoes packed with nutrients.'
-  },
-  {
-    id: 5,
-    name: 'Antioxidant Berry Mix',
-    image: mixedFruits,
-    price: 189.00,
-    originalPrice: 259.00,
-    rating: 4.8,
-    category: 'Fruits',
-    description: 'A powerful blend of dehydrated blueberries, cranberries, and goji berries.'
-  },
-  
-  {
-    id: 6,
-    name: 'bananaPowder',
-    image: bananaPowder,
-    price: 109.00,
-    originalPrice: 159.00,
-    rating: 4.4,
-    category: 'Powder',
-    description: 'Lightly seasoned banana powder, a perfect guilt-free snack.'
-  }
-];
+import productBg from '../assets/logo/product-bg.jpg';
+import productsData from './productsData';
 
 const StarRating = ({ rating }) => {
   const fullStars = Math.floor(rating);
@@ -88,6 +21,7 @@ const StarRating = ({ rating }) => {
 };
 
 const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('All Categories');
   const [priceRange, setPriceRange] = useState('All Prices');
@@ -106,10 +40,32 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
       products = products.filter(p => p.category === category);
     }
 
-    // Add price and sorting logic here if needed
+    if (priceRange !== 'All Prices') {
+      const [min, max] = priceRange.split('-').map(Number);
+      products = products.filter(p => p.price >= min && p.price <= max);
+    }
+
+    // Sorting logic
+    switch (sortOrder) {
+      case 'Name':
+        products.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'Price: Low to High':
+        products.sort((a, b) => a.price - b.price);
+        break;
+      case 'Price: High to Low':
+        products.sort((a, b) => b.price - a.price);
+        break;
+      case 'Rating':
+        products.sort((a, b) => b.rating - a.rating);
+        break;
+      default: // 'Sort by Popularity' (default)
+        // Keep original order which is by popularity
+        break;
+    }
 
     return products;
-  }, [searchQuery, category]);
+  }, [searchQuery, category, priceRange, sortOrder]);
 
   // We are keeping the main page structure from the previous step,
   // but replacing the product grid's content with the new design.
@@ -168,12 +124,28 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
         </div>
 
         <div className="sort-container">
-          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-            <option>Sort by Popularity</option>
-            <option>Name</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
-            <option>Rating</option>
+          <select 
+            value={sortOrder} 
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="sort-select"
+          >
+            <option value="Sort by Popularity">Sort by Popularity</option>
+            <option value="Name">Name</option>
+            <option value="Price: Low to High">Price: Low to High</option>
+            <option value="Price: High to Low">Price: High to Low</option>
+            <option value="Rating">Rating</option>
+          </select>
+          
+          <select 
+            value={priceRange}
+            onChange={(e) => setPriceRange(e.target.value)}
+            className="price-filter"
+          >
+            <option value="All Prices">All Prices</option>
+            <option value="0-100">Under ₹100</option>
+            <option value="100-150">₹100 - ₹150</option>
+            <option value="150-200">₹150 - ₹200</option>
+            <option value="200-1000">Over ₹200</option>
           </select>
         </div>
       </div>
@@ -182,10 +154,13 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
         <p className="product-count">Showing {filteredAndSortedProducts.length} products</p>
         <div className="product-grid">
           {filteredAndSortedProducts.map(product => (
-            <div key={product.id} className="product-card">
+              <div key={product.id} className="product-card" onClick={() => navigate(`/products/${product.id}`)}>
               <div className="product-image-container">
                 <img src={product.image} alt={product.name} />
-                <button onClick={() => onToggleFavorite(product)} className="like-btn">
+                <button onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleFavorite(product);
+                }} className="like-btn">
                   {favorites.some(item => item.id === product.id) ? <FaHeart color="red" /> : <FaRegHeart />}
                 </button>
                 {product.originalPrice && (

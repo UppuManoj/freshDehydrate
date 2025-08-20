@@ -34,8 +34,8 @@ const Navbar = ({ isLoggedIn, onLoginClick, onLogout, username, cartCount, favor
       <div className="navbar-center">
         <ul className="navbar-links">
           <li><NavLink to="/" exact activeClassName="active-link">Home</NavLink></li>
-          <li><NavLink to="/about" activeClassName="active-link">About</NavLink></li>
           <li><NavLink to="/products" activeClassName="active-link">Products</NavLink></li>
+          <li><NavLink to="/about" activeClassName="active-link">About</NavLink></li>
           <li><NavLink to="/contact" activeClassName="active-link">Contact</NavLink></li>
         </ul>
       </div>
