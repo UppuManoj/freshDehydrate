@@ -1,0 +1,163 @@
+/* AdminNavbar.css */
+.admin-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #e9e9e9;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.admin-navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.admin-navbar-brand {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.admin-logo-fresh {
+  color: #28a745;
+}
+
+.admin-navbar-title {
+  color: #666;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.admin-navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.admin-profile-container {
+  position: relative;
+}
+
+.admin-profile-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-profile-button:hover {
+  background-color: #f8f9fa;
+}
+
+.admin-profile-icon {
+  font-size: 1.5rem;
+  color: #28a745;
+}
+
+.admin-username {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.admin-profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1001;
+  width: 200px;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+}
+
+.admin-dropdown-item {
+  padding: 0.75rem 1rem;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #333;
+}
+
+.admin-dropdown-item strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.admin-dropdown-item small {
+  color: #666;
+  text-transform: capitalize;
+  font-size: 0.85rem;
+}
+
+.admin-dropdown-divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 0.5rem 0;
+}
+
+.admin-dropdown-logout-btn {
+  background: #dc3545 !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-size: 0.9rem !important;
+  width: calc(100% - 16px) !important;
+  text-align: center !important;
+  margin: 0 8px !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.admin-dropdown-logout-btn:hover {
+  background: #c82333 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-navbar {
+    padding: 0.75rem 1rem;
+  }
+  
+  .admin-navbar-left {
+    gap: 1rem;
+  }
+  
+  .admin-navbar-brand {
+    font-size: 1.2rem;
+  }
+  
+  .admin-navbar-title {
+    font-size: 1rem;
+  }
+  
+  .admin-username {
+    display: none;
+  }
+  
+  .admin-profile-dropdown {
+    width: 180px;
+  }
+}

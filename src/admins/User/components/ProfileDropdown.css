@@ -35,3 +35,16 @@
   background-color: #eee;
   margin: 0.5rem 0;
 }
+
+.dropdown-logout-btn {
+  background: #dc3545 !important;
+  color: white !important;
+  border: none !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  width: calc(100% - 16px) !important;
+  text-align: center !important;
+  margin: 0 8px !important;
+}

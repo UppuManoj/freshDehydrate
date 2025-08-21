@@ -1,11 +1,11 @@
-import mixedFruits from '../assets/mixed fruits.jpg';
-import dehydrated from '../assets/logo/dehydrated.jpg';
-import bananaChips from '../assets/products/banana-chips.jpeg';
-import mixedVegetables from '../assets/products/mixed vegetables.jpeg';
-import bananaPowder from '../assets/products/banana powder.jpg';
-import lemonSlices from '../assets/products/lemon slices.jpg';
-import lemonSlices2 from '../assets/products/lemon-Slices(2).jpg';
-import lemonSlices3 from '../assets/products/Lemon-Slices(3).jpeg';
+import dehydrated from '../../../assets/logo/dehydrated.jpg';
+import bananaChips from '../../../assets/products/banana-chips.jpeg';
+import mixedVegetables from '../../../assets/products/mixed vegetables.jpeg';
+import bananaPowder from '../../../assets/products/banana powder.jpg';
+import lemonSlices from '../../../assets/products/lemon slices.jpg';
+import lemonSlices2 from '../../../assets/products/lemon-Slices(2).jpg';
+import lemonSlices3 from '../../../assets/products/Lemon-Slices(3).jpeg';
+import mangoSlices from '../../../assets/products/Mango-slices.jpeg';
 
 const productsData = [
     {
@@ -66,7 +66,7 @@ const productsData = [
     {
         id: 5,
         name: 'Tropical Fruit Medley',
-        image: mixedFruits,
+        image: mangoSlices,
         price: 199.00,
         originalPrice: 259.00,
         rating: 4.7,

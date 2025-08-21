@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { FaShoppingCart, FaRegHeart, FaHeart, FaStar, FaStarHalfAlt, FaBoxOpen, FaHeadset } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './Products.css';
-import productBg from '../assets/logo/product-bg.jpg';
+import productBg from '../../../assets/logo/product-bg.jpg';
 import productsData from './productsData';
 
 const StarRating = ({ rating }) => {
