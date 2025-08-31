@@ -89,37 +89,6 @@ const Login = ({ onClose }) => {
               {loading ? 'Logging in...' : 'Login'}
             </button>
             
-            {/* <div className="demo-credentials">
-              <h4>Quick Login (Demo):</h4>
-              <div className="credential-buttons">
-                <button 
-                  type="button" 
-                  className="demo-btn superadmin-btn"
-                  onClick={() => fillCredentials('superadmin')}
-                >
-                  Super Admin
-                </button>
-                <button 
-                  type="button" 
-                  className="demo-btn useradmin-btn"
-                  onClick={() => fillCredentials('useradmin')}
-                >
-                  User Admin
-                </button>
-                <button 
-                  type="button" 
-                  className="demo-btn user-btn"
-                  onClick={() => fillCredentials('user')}
-                >
-                  User
-                </button>
-              </div>
-              <div className="credentials-info">
-                <p><small><strong>Super Admin:</strong> superadmin@dehydrate.com</small></p>
-                <p><small><strong>User Admin:</strong> useradmin@dehydrate.com</small></p>
-                <p><small><strong>User:</strong> user@admin.com</small></p>
-              </div>
-            </div> */}
             
             <p>Don't have an account? <span onClick={() => setIsLoginView(false)}>Sign up</span></p>
           </form>

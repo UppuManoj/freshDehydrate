@@ -256,53 +256,187 @@
   z-index: 1000;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 1024px) {
   .navbar {
-    padding: 0.75rem 1rem; /* Reduced padding for mobile */
+    padding: 0.9rem 1.5rem;
   }
 
   .navbar-brand a {
-    font-size: 1.1rem; /* Slightly smaller font for mobile */
+    font-size: 1.15rem;
+  }
+
+  .navbar-links {
+    gap: 1.5rem;
+  }
+
+  .navbar-icons {
+    gap: 1.3rem;
+  }
+}
+
+@media (max-width: 850px) {
+  .navbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .navbar-brand a {
+    font-size: 1.1rem;
   }
 
   .navbar-center {
-    display: none; /* Hide center links on mobile */
+    display: none;
   }
 
   .menu-icon {
-    display: block; /* Show hamburger */
-    font-size: 1.3rem; /* Slightly smaller icon */
+    display: block;
+    font-size: 1.3rem;
   }
 
   .mobile-menu {
-    display: flex; /* Use flex for alignment */
-    width: 85%; /* Slightly narrower on very small screens */
+    display: flex;
+    width: 85%;
   }
 
   .mobile-menu .navbar-links {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem; /* Slightly reduced gap */
+    gap: 1.25rem;
     text-align: left;
     width: 100%;
   }
 
   .navbar-icons {
-    gap: 1rem; /* Reduced gap between icons */
+    gap: 1rem;
   }
 
   .icon-link {
-    font-size: 1.3rem; /* Slightly smaller icons */
+    font-size: 1.3rem;
   }
 
   .login-button-navbar {
-    padding: 0.4rem 0.8rem; /* Slightly smaller button */
+    padding: 0.4rem 0.8rem;
     font-size: 0.9rem;
   }
 
   .cart-count,
   .favorites-count {
-    font-size: 0.65rem; /* Slightly smaller count badges */
+    font-size: 0.65rem;
     padding: 1px 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.6rem 0.8rem;
+    min-width: 250px;
+  }
+
+  .navbar-brand a {
+    font-size: 1rem;
+  }
+
+  .mobile-menu {
+    width: 90%;
+    max-width: 280px;
+  }
+
+  .mobile-menu-header {
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mobile-menu-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .close-icon {
+    font-size: 1.3rem;
+  }
+
+  .mobile-menu .navbar-links {
+    gap: 1rem;
+  }
+
+  .mobile-menu .navbar-links a {
+    padding: 0.8rem 0;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .mobile-menu .navbar-links a:last-child {
+    border-bottom: none;
+  }
+
+  .navbar-icons {
+    gap: 0.8rem;
+  }
+
+  .icon-link {
+    font-size: 1.2rem;
+  }
+
+  .login-button-navbar {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.85rem;
+    border-radius: 3px;
+  }
+
+  .cart-count,
+  .favorites-count {
+    font-size: 0.6rem;
+    padding: 1px 3px;
+    top: -6px;
+    right: -6px;
+  }
+
+  .profile-icon-button {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .navbar {
+    padding: 0.5rem 0.6rem;
+    min-width: 220px;
+  }
+
+  .navbar-brand a {
+    font-size: 0.9rem;
+  }
+
+  .mobile-menu {
+    width: 95%;
+    max-width: 250px;
+    padding: 1.5rem;
+  }
+
+  .mobile-menu-header h3 {
+    font-size: 1rem;
+  }
+
+  .mobile-menu .navbar-links a {
+    font-size: 0.9rem;
+    padding: 0.7rem 0;
+  }
+
+  .navbar-icons {
+    gap: 0.6rem;
+  }
+
+  .icon-link {
+    font-size: 1.1rem;
+  }
+
+  .login-button-navbar {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .cart-count,
+  .favorites-count {
+    font-size: 0.55rem;
+    padding: 0px 2px;
+    top: -5px;
+    right: -5px;
   }
 }

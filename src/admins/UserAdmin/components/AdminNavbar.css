@@ -135,14 +135,52 @@
   background: #c82333 !important;
 }
 
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background-color: #f8f9fa;
+}
+
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .admin-navbar {
+    padding: 0.9rem 1.5rem;
+  }
+  
+  .admin-navbar-left {
+    gap: 1.5rem;
+  }
+  
+  .admin-navbar-brand {
+    font-size: 1.4rem;
+  }
+  
+  .admin-navbar-title {
+    font-size: 1.05rem;
+  }
+}
+
 @media (max-width: 768px) {
   .admin-navbar {
     padding: 0.75rem 1rem;
+    flex-wrap: wrap;
   }
   
   .admin-navbar-left {
     gap: 1rem;
+    flex: 1;
+    order: 1;
   }
   
   .admin-navbar-brand {
@@ -151,6 +189,16 @@
   
   .admin-navbar-title {
     font-size: 1rem;
+    order: 3;
+    width: 100%;
+    margin-top: 0.5rem;
+    text-align: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e9e9e9;
+  }
+  
+  .admin-navbar-right {
+    order: 2;
   }
   
   .admin-username {
@@ -159,5 +207,78 @@
   
   .admin-profile-dropdown {
     width: 180px;
+    right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-navbar {
+    padding: 0.5rem 1rem;
+  }
+  
+  .admin-navbar-left {
+    gap: 0.8rem;
+  }
+  
+  .admin-navbar-brand {
+    font-size: 1.1rem;
+  }
+  
+  .admin-navbar-title {
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+  }
+  
+  .admin-profile-button {
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .admin-profile-icon {
+    font-size: 1.3rem;
+  }
+  
+  .admin-profile-dropdown {
+    width: 160px;
+    right: -5px;
+  }
+  
+  .admin-dropdown-item {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .admin-dropdown-item strong {
+    font-size: 0.95rem;
+  }
+  
+  .admin-dropdown-item small {
+    font-size: 0.8rem;
+  }
+  
+  .admin-dropdown-logout-btn {
+    padding: 6px 12px !important;
+    font-size: 0.85rem !important;
+    margin: 0 6px !important;
+    width: calc(100% - 12px) !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .admin-navbar {
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .admin-navbar-brand {
+    font-size: 1rem;
+  }
+  
+  .admin-navbar-title {
+    font-size: 0.85rem;
+  }
+  
+  .admin-profile-dropdown {
+    width: 140px;
+    right: -10px;
   }
 }

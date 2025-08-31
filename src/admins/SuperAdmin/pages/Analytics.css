@@ -416,48 +416,39 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .analytics-page {
+    padding: 25px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .analytics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .analytics-page {
-    padding: 20px;
+    padding: 15px;
+  }
+
+  .analytics-header h2 {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+  }
+
+  .analytics-header p {
+    font-size: 1rem;
   }
 
   .kpi-grid {
     grid-template-columns: 1fr;
-  }
-
-  .analytics-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .category-item,
-  .price-item {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .category-bar,
-  .price-bar {
-    min-width: unset;
-  }
-
-  .stock-overview {
-    grid-template-columns: 1fr;
-  }
-
-  .metric-item {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .activity-item {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .analytics-header h2 {
-    font-size: 2rem;
+    gap: 15px;
+    margin-bottom: 30px;
   }
 
   .kpi-card {
@@ -465,10 +456,300 @@
   }
 
   .kpi-content h3 {
-    font-size: 2rem;
+    font-size: 2.2rem;
+  }
+
+  .kpi-content p {
+    font-size: 0.9rem;
+  }
+
+  .kpi-icon {
+    font-size: 1.8rem;
+  }
+
+  .kpi-trend {
+    font-size: 0.85rem;
+  }
+
+  .analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .analytics-card {
     padding: 20px;
+  }
+
+  .card-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .card-header p {
+    font-size: 0.9rem;
+  }
+
+  .category-item,
+  .price-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .category-bar,
+  .price-bar {
+    min-width: unset;
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .category-percentage,
+  .price-percentage {
+    text-align: center;
+    margin-top: 5px;
+  }
+
+  .stock-overview {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .stock-item {
+    padding: 15px;
+  }
+
+  .stock-info h4 {
+    font-size: 1.5rem;
+  }
+
+  .stock-info p {
+    font-size: 0.9rem;
+  }
+
+  .metric-item {
+    flex-direction: row;
+    text-align: left;
+    gap: 12px;
+  }
+
+  .metric-icon {
+    font-size: 1.3rem;
+    min-width: 35px;
+  }
+
+  .metric-info h4 {
+    font-size: 1.3rem;
+  }
+
+  .metric-info p {
+    font-size: 0.9rem;
+  }
+
+  .activity-item {
+    flex-direction: row;
+    text-align: left;
+    gap: 12px;
+  }
+
+  .activity-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1.1rem;
+  }
+
+  .activity-content p {
+    font-size: 0.9rem;
+  }
+
+  .activity-content small {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .analytics-page {
+    padding: 10px;
+  }
+
+  .analytics-header {
+    margin-bottom: 20px;
+  }
+
+  .analytics-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: 6px;
+  }
+
+  .analytics-header p {
+    font-size: 0.9rem;
+  }
+
+  .kpi-grid {
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+
+  .kpi-card {
+    padding: 15px;
+  }
+
+  .kpi-content h3 {
+    font-size: 2rem;
+  }
+
+  .kpi-content p {
+    font-size: 0.85rem;
+  }
+
+  .kpi-icon {
+    font-size: 1.6rem;
+  }
+
+  .kpi-trend {
+    font-size: 0.8rem;
+  }
+
+  .analytics-grid {
+    gap: 15px;
+  }
+
+  .analytics-card {
+    padding: 15px;
+  }
+
+  .card-header {
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+    gap: 8px;
+  }
+
+  .card-header p {
+    font-size: 0.85rem;
+  }
+
+  .category-item,
+  .price-item {
+    gap: 6px;
+  }
+
+  .category-name,
+  .price-range {
+    font-size: 0.9rem;
+  }
+
+  .category-count,
+  .price-count {
+    font-size: 0.8rem;
+  }
+
+  .category-percentage,
+  .price-percentage {
+    font-size: 0.85rem;
+  }
+
+  .stock-overview {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stock-item {
+    padding: 12px;
+  }
+
+  .stock-icon {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+
+  .stock-info h4 {
+    font-size: 1.4rem;
+  }
+
+  .stock-info p {
+    font-size: 0.85rem;
+  }
+
+  .performance-metrics {
+    gap: 15px;
+  }
+
+  .metric-item {
+    padding: 12px;
+    gap: 10px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .metric-icon {
+    font-size: 1.4rem;
+    min-width: auto;
+  }
+
+  .metric-info h4 {
+    font-size: 1.2rem;
+  }
+
+  .metric-info p {
+    font-size: 0.85rem;
+  }
+
+  .metric-trend {
+    font-size: 0.75rem;
+  }
+
+  .activity-list {
+    gap: 12px;
+  }
+
+  .activity-item {
+    padding: 12px;
+    gap: 10px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .activity-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    align-self: center;
+  }
+
+  .activity-content p {
+    font-size: 0.85rem;
+    margin-bottom: 3px;
+  }
+
+  .activity-content small {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .analytics-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .kpi-content h3 {
+    font-size: 1.8rem;
+  }
+
+  .analytics-card {
+    padding: 12px;
+  }
+
+  .card-header h3 {
+    font-size: 1rem;
+  }
+
+  .stock-info h4 {
+    font-size: 1.2rem;
+  }
+
+  .metric-info h4 {
+    font-size: 1.1rem;
   }
 }
