@@ -181,3 +181,62 @@
 .credentials-info small {
   font-size: 10px;
 }
+
+/* Password input container styles */
+.password-input-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 0.75rem;
+  margin-bottom: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle-btn:hover {
+  color: #28a745;
+  background: none;
+}
+
+.password-input-container input:focus {
+  outline: none;
+  border-color: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+/* Override the main form button styles for password toggle */
+.password-toggle-btn {
+  width: auto !important;
+  padding: 0 !important;
+  background: none !important;
+  margin: 0 !important;
+}
+
+.password-toggle-btn:hover {
+  background: none !important;
+}

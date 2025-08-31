@@ -31,10 +31,10 @@ const Footer = () => {
         <div className="footer-column links categories">
           <h4>Categories</h4>
           <ul>
-            <li><Link to="/products/dehydrated-fruits">Dehydrated Fruits</Link></li>
-            <li><Link to="/products/vegetable-snacks">Vegetable Snacks</Link></li>
-            <li><Link to="/products/mixed-trail-mixes">Mixed Trail Mixes</Link></li>
-            <li><Link to="/products/organic-options">Organic Options</Link></li>
+            <li><Link to="/products">Dehydrated Fruits</Link></li>
+            <li><Link to="/products">Dehydrated Vegetables</Link></li>
+            <li><Link to="/products">Powder</Link></li>
+            <li><Link to="/products">Organic products</Link></li>
           </ul>
         </div>
 

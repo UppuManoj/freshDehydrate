@@ -6,10 +6,17 @@ import lemonSlices from '../../../assets/products/lemon slices.jpg';
 import lemonSlices2 from '../../../assets/products/lemon-Slices(2).jpg';
 import lemonSlices3 from '../../../assets/products/Lemon-Slices(3).jpeg';
 import mangoSlices from '../../../assets/products/Mango-slices.jpeg';
+import tomatoSlices from '../../../assets/products/tomato slices.jpg';
+import gingerFlakes from '../../../assets/products/ginger flakes.jpg';
 
+/**
+ * Default Product Data for SuperAdmin Management
+ * This serves as the initial product catalog and reset template
+ * SuperAdmin can modify, add, or delete products through the management interface
+ */
 const productsData = [
     {
-        id: 11,
+        id: 1,
         name: 'Lemon Slices',
         image: lemonSlices,
         images: [
@@ -23,16 +30,7 @@ const productsData = [
         category: 'Fruits',
         description: 'Premium quality dehydrated lemon slices, perfect for teas, cocktails, and culinary uses. Rich in vitamin C and adds a refreshing citrus flavor to your dishes.'
     },
-    // {
-    //     id: 1,
-    //     name: 'Antioxidant Berry Mix',
-    //     image: mixedFruits,
-    //     price: 189.00,
-    //     originalPrice: 259.00,
-    //     rating: 4.8,
-    //     category: 'Fruits',
-    //     description: 'A powerful blend of dehydrated blueberries, cranberries, and goji berries.'
-    // },
+    
     {
         id: 2,
         name: 'Crispy Kale Chips',
@@ -43,6 +41,7 @@ const productsData = [
         category: 'Vegetables',
         description: 'Lightly seasoned kale chips, a perfect guilt-free snack.'
     },
+
     {
         id: 3,
         name: 'Crunchy Banana Chips',
@@ -82,6 +81,26 @@ const productsData = [
         rating: 4.4,
         category: 'Powder',
         description: 'Lightly seasoned banana powder, a perfect guilt-free snack.'
+    },
+    {
+        id: 7,
+        name: 'Tomato Slices',
+        image: tomatoSlices,
+        price: 149.00,
+        originalPrice: 199.00,
+        rating: 4.5,
+        category: 'Vegetables',
+        description: 'Dehydrated tomato slices, perfect for soups, salads, and snacks.'
+    },
+    {
+        id: 8,
+        name: 'Ginger Flakes',
+        image: gingerFlakes,
+        price: 119.00,
+        originalPrice: 169.00,
+        rating: 4.0,
+        category: 'Vegetables',
+        description: 'Dehydrated ginger flakes, ideal for teas, cooking, and baking.'
     }
 ];
 

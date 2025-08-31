@@ -15,6 +15,10 @@ function AdminApp() {
       <div className="user-admin-app">
         <AdminNavbar title="👨‍💼 User Admin Dashboard" />
         <div className="admin-dashboard" style={{ marginTop: '80px' }}>
+        <Routes>
+            <Route path="/" element={<div className="welcome-message">Welcome to User Admin Panel, {currentUser?.name}!</div>} />
+            <Route path="/reports" element={<CustomerReports />} />
+          </Routes>
           <div className="dashboard-header">
             <h1>👨‍💼 User Admin Dashboard</h1>
             <p>Customer and order management - Isolated Environment</p>
@@ -57,11 +61,6 @@ function AdminApp() {
               </div>
             </div>
           </div>
-          
-          <Routes>
-            <Route path="/" element={<div className="welcome-message">Welcome to User Admin Panel, {currentUser?.name}!</div>} />
-            <Route path="/reports" element={<CustomerReports />} />
-          </Routes>
         </div>
         <Footer />
       </div>

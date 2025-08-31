@@ -1,92 +1,228 @@
 /* AdminNavbar.css */
-.admin-navbar {
+.admin-navbar-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #fff;
-  color: #333;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  border-bottom: 1px solid #e9e9e9;
   z-index: 1000;
-  box-sizing: border-box;
+}
+
+.admin-navbar {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #61e1ca, #36b6e1df);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border-bottom: 1px solid #343a40;
+}
+
+.admin-navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .admin-navbar-left {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 0;
+  flex-shrink: 0;
 }
 
 .admin-navbar-brand {
-  color: #333;
+margin-left: -10%;
+  margin-right: 25%;
+  display: flex;
+  align-items: center;
+  color: white;
   text-decoration: none;
   font-weight: bold;
   font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.admin-navbar-brand:hover {
+  transform: scale(1.05);
+  color: white;
+  text-decoration: none;
 }
 
 .admin-logo-fresh {
   color: #28a745;
 }
 
-.admin-navbar-title {
-  color: #666;
-  font-size: 1.1rem;
-  font-weight: 500;
+.admin-nav-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 1.5rem;
+  justify-content: center;
+  flex: 1;
+}
+
+.admin-nav-menu li {
+  margin: 0;
+}
+.admin-nav-menu a {
+
+  color: #000000;
+}
+.admin-nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #adb5bd;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  position: relative;
+  overflow: hidden;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  width: auto;
+}
+
+.admin-nav-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-nav-link:disabled:hover {
+  transform: none;
+  background: none;
+  box-shadow: none;
+  border: none;
+}
+
+.admin-nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.admin-nav-link:hover::before {
+  left: 100%;
+}
+
+.admin-nav-link:hover {
+  color: white;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.admin-nav-link.active {
+  color: white;
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.3), rgba(40, 167, 69, 0.1));
+  border: 1px solid rgba(40, 167, 69, 0.5);
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+}
+
+.admin-nav-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  transition: transform 0.3s ease;
+color: #000000;}
+
+.admin-nav-link:hover .admin-nav-icon {
+  transform: scale(1.1);
 }
 
 .admin-navbar-right {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  margin-left: 35%;
 }
 
 .admin-profile-container {
   position: relative;
+  
 }
 
 .admin-profile-button {
+  
   display: flex;
   align-items: center;
   gap: 0.5rem;
   background: none;
   border: none;
-  color: #333;
+  color: white;
   cursor: pointer;
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
 }
 
-.admin-profile-button:hover {
-  background-color: #f8f9fa;
-}
+  .admin-profile-button:hover {
+    background-color: white;
+    border-color: rgba(255,255,255,0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+
+  .admin-profile-button:hover .admin-username {
+    color: black;
+  }
+
+  .admin-profile-button:hover .admin-profile-icon {
+    color: #28a745;
+  }
 
 .admin-profile-icon {
   font-size: 1.5rem;
   color: #28a745;
+  transition: transform 0.3s ease;
+}
+
+.admin-profile-button:hover .admin-profile-icon {
+  transform: scale(1.1);
 }
 
 .admin-username {
   font-weight: 500;
   font-size: 1rem;
+  color: rgb(255, 255, 255);
 }
 
-.admin-profile-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  z-index: 1001;
-  width: 200px;
-  padding: 0.5rem 0;
-  margin-top: 0.5rem;
+  .admin-profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: rgb(21, 21, 21);
+    border: 1px solid #444;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    z-index: 1001;
+    width: 250px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    animation: dropdownFadeIn 0.3s ease;
+  }
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .admin-dropdown-item {
@@ -96,61 +232,120 @@
   text-align: left;
   background: none;
   border: none;
-  color: #333;
+  color: #ffffff;
+}
+
+.admin-profile-info {
+  border-bottom: 1px solid #c7c1c1 !important;
+  margin-bottom: 0.5rem;
+  padding-bottom: 1rem;
 }
 
 .admin-dropdown-item strong {
   display: block;
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin-bottom: 0.25rem;
+  color: #ffffff;
+  font-weight: 600;
 }
 
-.admin-dropdown-item small {
-  color: #666;
+.admin-user-email {
+  display: block;
+  color: #b0b0b0;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  font-style: italic;
+}
+
+.admin-user-role {
+  display: inline-block;
+  color: #00ff88;
   text-transform: capitalize;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+  background-color: rgba(0, 255, 136, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(0, 255, 136, 0.3);
 }
 
 .admin-dropdown-divider {
   height: 1px;
-  background-color: #eee;
+  background-color: #444;
   margin: 0.5rem 0;
 }
 
 .admin-dropdown-logout-btn {
-  background: #dc3545 !important;
-  color: white !important;
+  background: linear-gradient(135deg, #dc3545, #c82333) !important;
+  color: rgb(243, 243, 243) !important;
   border: none !important;
-  padding: 8px 16px !important;
-  border-radius: 4px !important;
+  padding: 10px 16px !important;
+  border-radius: 8px !important;
   cursor: pointer !important;
   font-size: 0.9rem !important;
   width: calc(100% - 16px) !important;
   text-align: center !important;
   margin: 0 8px !important;
-  transition: background-color 0.3s ease !important;
+  transition: all 0.3s ease !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3) !important;
 }
 
 .admin-dropdown-logout-btn:hover {
-  background: #c82333 !important;
+  background: linear-gradient(135deg, #c82333, #a71e2a) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4) !important;
 }
 
 /* Responsive Design */
+@media (max-width: 992px) {
+  .admin-nav-menu {
+    gap: 1rem;
+  }
+  
+  .admin-nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  .admin-nav-icon {
+    font-size: 1.25rem;
+  }
+}
+
 @media (max-width: 768px) {
   .admin-navbar {
     padding: 0.75rem 1rem;
   }
   
+  .admin-navbar-content {
+    flex-wrap: wrap;
+  }
+  
   .admin-navbar-left {
-    gap: 1rem;
+    gap: 0;
+    flex: none;
   }
   
   .admin-navbar-brand {
     font-size: 1.2rem;
   }
   
-  .admin-navbar-title {
-    font-size: 1rem;
+  .admin-nav-menu {
+    order: 3;
+    width: 100%;
+    margin-top: 1rem;
+    gap: 0.5rem;
+    justify-content: space-around;
+  }
+  
+  .admin-nav-link {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .admin-nav-icon {
+    font-size: 1.2rem;
   }
   
   .admin-username {
@@ -158,6 +353,21 @@
   }
   
   .admin-profile-dropdown {
-    width: 180px;
+    width: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-navbar-brand {
+    font-size: 1rem;
+  }
+  
+  .admin-nav-link {
+    padding: 0.4rem;
+  }
+  
+  .admin-profile-dropdown {
+    width: 200px;
+    right: -20px;
   }
 }

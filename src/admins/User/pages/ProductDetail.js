@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaArrowLeft } from 'react-icons/fa';
-import productsData from './productsData';
+import { useProducts } from '../../../contexts/ProductContext';
 import './ProductDetail.css';
 
 const ProductDetail = ({ onAddToCart }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = productsData.find(p => p.id === parseInt(id));
+  const { getProductById } = useProducts();
+  const product = getProductById(id);
   
   // Initialize state at the top level
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   if (!product) {
     return <div className="product-not-found">Product not found</div>;
+  }
+
+  if (!product.isAvailable || product.stockStatus === 'out_of_stock') {
+    return (
+      <div className="product-not-found">
+        <h2>Product Not Available</h2>
+        <p>This product is currently not available for purchase.</p>
+        <button className="back-button" onClick={() => navigate('/products')}>
+          <FaArrowLeft /> Browse Other Products
+        </button>
+      </div>
+    );
   }
   
   const productImages = product.images || [product.image];

@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './Login.css';
 
 const Login = ({ onClose }) => {
   const [isLoginView, setIsLoginView] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { login } = useAuth();
 
   const handleLogin = async (e) => {
@@ -65,13 +69,22 @@ const Login = ({ onClose }) => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="password-input-container">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             <button type="submit" disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </button>
@@ -114,14 +127,44 @@ const Login = ({ onClose }) => {
           <form onSubmit={handleSignup} className="signup-form">
             <h2>Sign Up</h2>
             <input type="text" placeholder="Full Name" required />
-            <input type="number" placeholder="Phone Number" required />
+            <input type="tel" placeholder="Phone Number" required />
             <input type="email" placeholder="Email ID" required />
             <input type="text" placeholder="Address" required />
             <input type="text" placeholder="State" required />
             <input type="text" placeholder="City" required />
-            <input type="number" placeholder="Pincode" required />
-            <input type="password" placeholder="Create Password" required />
-            <input type="password" placeholder="Confirm Password" required />
+            <input type="text" placeholder="Pincode" required />
+            <div className="password-input-container">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                placeholder="Create Password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required 
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            <div className="password-input-container">
+              <input 
+                type={showConfirmPassword ? "text" : "password"} 
+                placeholder="Confirm Password" 
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required 
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             <button type="submit">Create Account</button>
             <p>Already have an account? <span onClick={() => setIsLoginView(true)}>Login</span></p>
           </form>

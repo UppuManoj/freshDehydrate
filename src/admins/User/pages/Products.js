@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { FaShoppingCart, FaRegHeart, FaHeart, FaStar, FaStarHalfAlt, FaBoxOpen, FaHeadset } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useProducts } from '../../../contexts/ProductContext';
 import './Products.css';
 import productBg from '../../../assets/logo/product-bg.jpg';
-import productsData from './productsData';
 
 const StarRating = ({ rating }) => {
   const fullStars = Math.floor(rating);
@@ -22,13 +22,15 @@ const StarRating = ({ rating }) => {
 
 const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
   const navigate = useNavigate();
+  const { getAvailableProducts } = useProducts();
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('All Categories');
   const [priceRange, setPriceRange] = useState('All Prices');
   const [sortOrder, setSortOrder] = useState('Sort by Popularity');
 
   const filteredAndSortedProducts = useMemo(() => {
-    let products = [...productsData];
+    // Only get available products for users
+    let products = [...getAvailableProducts()];
 
     if (searchQuery) {
       products = products.filter(p =>
@@ -179,6 +181,7 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
                   {product.originalPrice && (
                     <span className="original-price">₹{product.originalPrice.toFixed(2)}</span>
                   )}
+                  
                 </div>
                 <button onClick={() => onAddToCart(product)} className="add-to-cart-btn">
                   <FaShoppingCart /> Add to Cart
@@ -193,5 +196,3 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
 };
 
 export default Products;
-
-
