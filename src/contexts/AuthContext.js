@@ -71,9 +71,9 @@ export const AuthProvider = ({ children }) => {
     console.log('Logout function called'); // Debug log
     setCurrentUser(null);
     localStorage.removeItem('currentUser');
-    // Force page refresh to ensure complete state reset
+    // Redirect to home page after logout
     setTimeout(() => {
-      window.location.reload();
+      window.location.href = '/';
     }, 100);
   };
 

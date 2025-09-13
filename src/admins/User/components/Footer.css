@@ -141,9 +141,22 @@
     padding: 30px 0;
   }
 
+  .footer-main {
+    padding: 0 15px;
+  }
+
+  .footer-column {
+    margin: 15px 0;
+  }
+
+  .footer-logo {
+    font-size: 1.6rem;
+  }
+
   .footer-bottom {
     flex-direction: column;
     gap: 10px;
+    padding: 15px;
   }
 
   .footer-bottom-links {
@@ -154,8 +167,74 @@
     margin: 0 10px;
   }
 
-  .footer-column.quick-links,
-  .footer-column.categories {
-    display: none;
+  .footer-column.contact p {
+    font-size: 0.9rem;
+  }
+
+  .contact-icon {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 25px 0;
+  }
+
+  .footer-main {
+    padding: 0 10px;
+  }
+
+  .footer-column {
+    margin: 12px 0;
+    min-width: 100%;
+  }
+
+  .footer-logo {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+  }
+
+  .footer-column.about p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+
+  .footer-column h4 {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+
+  .footer-column.links a {
+    font-size: 0.9rem;
+  }
+
+  .footer-column.contact p {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+
+  .contact-icon {
+    font-size: 0.9rem;
+    margin-right: 8px;
+  }
+
+  .social-icons a {
+    font-size: 1.1rem;
+    margin-right: 12px;
+  }
+
+  .footer-bottom {
+    padding: 12px;
+  }
+
+  .footer-bottom p {
+    font-size: 0.8rem;
+  }
+
+  .footer-bottom-links a {
+    font-size: 0.8rem;
+    margin: 0 8px;
   }
 }

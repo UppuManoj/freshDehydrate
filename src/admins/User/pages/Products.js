@@ -75,7 +75,7 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
 
   return (
     <div className="products-page-container">
-            <div className="product-hero" style={{ backgroundImage: `url(${productBg})` }}>
+      <div className="product-hero" style={{ backgroundImage: `url(${productBg})` }}>
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <h1>Premium Dehydrated Products Collection</h1>
@@ -126,8 +126,8 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
         </div>
 
         <div className="sort-container">
-          <select 
-            value={sortOrder} 
+          <select
+            value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
             className="sort-select"
           >
@@ -137,8 +137,8 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
             <option value="Price: High to Low">Price: High to Low</option>
             <option value="Rating">Rating</option>
           </select>
-          
-          <select 
+
+          <select
             value={priceRange}
             onChange={(e) => setPriceRange(e.target.value)}
             className="price-filter"
@@ -156,7 +156,7 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
         <p className="product-count">Showing {filteredAndSortedProducts.length} products</p>
         <div className="product-grid">
           {filteredAndSortedProducts.map(product => (
-              <div key={product.id} className="product-card" onClick={() => navigate(`/products/${product.id}`)}>
+            <div key={product.id} className="product-card" onClick={() => navigate(`/products/${product.id}`)}>
               <div className="product-image-container">
                 <img src={product.image} alt={product.name} />
                 <button onClick={(e) => {
@@ -168,7 +168,7 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
               </div>
               <div className="product-info">
                 <span className="product-category">{product.category}</span>
-               
+
                 <h4 className="product-name">{product.name}</h4>
                 <p className="product-description">{product.description}</p>
                 <div className="product-price">
