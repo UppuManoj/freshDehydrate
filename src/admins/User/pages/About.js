@@ -95,19 +95,19 @@ const About = () => {
         <p>The passionate people behind Fresh Dehydrate</p>
         <div className="team-members">
           <div className="team-member">
-            <img src="https://i.pravatar.cc/150?u=sarah" alt="Manoj kumar" />
+            <img src="" alt="Manoj kumar" />
             <h4>Manoj kumar</h4>
             <p className="role">Founder & CEO</p>
             <p>Passionate about healthy living and sustainable food practices.</p>
           </div>
           <div className="team-member">
-            <img src="https://i.pravatar.cc/150?u=michael" alt="Jaswanth" />
+            <img src="" alt="Jaswanth" />
             <h4>Jaswanth kumar</h4>
             <p className="role">Head of Operations</p>
             <p>15+ years experience in food processing and quality control.</p>
           </div>
           <div className="team-member">
-            <img src="https://i.pravatar.cc/150?u=emily" alt="Sairam" />
+            <img src="" alt="Sairam" />
             <h4>sairam</h4>
             <p className="role">Nutritionist</p>
             <p>Certified nutritionist ensuring our products meet the highest standards.</p>

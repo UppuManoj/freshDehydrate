@@ -127,7 +127,10 @@ const AdminNavbar = ({ title = "Admin Dashboard" }) => {
                 </button>
               </li>
               <li>
-                <button className="admin-nav-link" disabled>
+                <button 
+                  onClick={() => handleNavigation('/users')} 
+                  className={`admin-nav-link ${location.pathname === '/users' ? 'active' : ''}`}
+                >
                   <FaUsers className="admin-nav-icon" />
                   Users
                 </button>
@@ -223,7 +226,10 @@ const AdminNavbar = ({ title = "Admin Dashboard" }) => {
             </button>
           </li>
           <li>
-            <button className="admin-nav-link" disabled>
+            <button 
+              onClick={() => handleNavigation('/users')} 
+              className={`admin-nav-link ${location.pathname === '/users' ? 'active' : ''}`}
+            >
               <FaUsers className="admin-nav-icon" />
               Users
             </button>

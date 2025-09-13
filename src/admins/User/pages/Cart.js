@@ -1,9 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaTrash, FaArrowLeft } from 'react-icons/fa';
+import { useProducts } from '../../../contexts/ProductContext';
+import { useOrders } from '../../../contexts/OrderContext';
 import './Cart.css';
 
-const Cart = ({ cart, setCart }) => {
+const Cart = ({ cart, setCart, isLoggedIn, onLoginClick }) => {
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const { getAllProducts } = useProducts();
+  const { confirmOrder } = useOrders();
+  const navigate = useNavigate();
 
   const cartItems = cart.reduce((acc, product) => {
     const existingProduct = acc.find(item => item.id === product.id);
@@ -30,6 +36,56 @@ const Cart = ({ cart, setCart }) => {
 
   const handleClearCart = () => {
     setCart([]);
+  };
+
+  const handleCheckout = async () => {
+    if (!isLoggedIn) {
+      onLoginClick();
+      return;
+    }
+
+    setIsCheckingOut(true);
+    
+    try {
+      // Get current product stock information
+      const allProducts = getAllProducts();
+      const enrichedCartItems = cartItems.map(item => {
+        const currentProduct = allProducts.find(p => p.id === item.id);
+        return {
+          ...item,
+          currentStock: currentProduct?.stockQuantity || 0
+        };
+      });
+
+      // Check if sufficient stock is available
+      const insufficientStock = enrichedCartItems.filter(item => 
+        item.quantity > item.currentStock
+      );
+
+      if (insufficientStock.length > 0) {
+        alert(`Insufficient stock for: ${insufficientStock.map(item => item.name).join(', ')}`);
+        setIsCheckingOut(false);
+        return;
+      }
+
+      // Navigate to payments page with order data
+      const orderData = {
+        items: enrichedCartItems,
+        subtotal: subtotal,
+        shipping: shippingCost,
+        tax: tax,
+        total: total,
+        shippingAddress: 'Default Address'
+      };
+
+      navigate('/payments', { state: orderData });
+      
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Error processing checkout. Please try again.');
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -92,7 +148,13 @@ const Cart = ({ cart, setCart }) => {
             <span>Total:</span>
             <span>₹{total.toFixed(2)}</span>
           </div>
-          <button className="proceed-to-checkout-btn">Proceed to Checkout</button>
+          <button 
+            className="proceed-to-checkout-btn" 
+            onClick={handleCheckout}
+            disabled={isCheckingOut || cartItems.length === 0}
+          >
+            {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
+          </button>
           <div className="summary-actions">
             <button onClick={handleClearCart} className="clear-cart-btn">
               <FaTrash /> Clear Cart

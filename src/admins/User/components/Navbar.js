@@ -37,7 +37,6 @@ const Navbar = ({ isLoggedIn, onLoginClick, onLogout, username, cartCount, favor
           <li><NavLink to="/products" activeClassName="active-link">Products</NavLink></li>
           <li><NavLink to="/about" activeClassName="active-link">About</NavLink></li>
           <li><NavLink to="/contact" activeClassName="active-link">Contact</NavLink></li>
-          {isLoggedIn && <li><NavLink to="/profile" activeClassName="active-link">Profile</NavLink></li>}
         </ul>
       </div>
 
@@ -56,7 +55,7 @@ const Navbar = ({ isLoggedIn, onLoginClick, onLogout, username, cartCount, favor
               <button onClick={handleProfileClick} className="icon-link profile-icon-button">
                 <FaUserCircle />
               </button>
-              {showProfileDropdown && <ProfileDropdown username={username} />}
+              {showProfileDropdown && <ProfileDropdown username={username} onClose={() => setShowProfileDropdown(false)} />}
             </div>
           ) : (
             <button className="login-button-navbar" onClick={onLoginClick}>Login</button>

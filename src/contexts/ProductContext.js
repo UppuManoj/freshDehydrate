@@ -67,11 +67,17 @@ export const ProductProvider = ({ children }) => {
   const updateProductStock = (productId, stockStatus, stockQuantity = null) => {
     const updates = { stockStatus };
     if (stockQuantity !== null) {
-      updates.stockQuantity = stockQuantity;
+      updates.stockQuantity = Math.max(0, stockQuantity); // Ensure stock doesn't go negative
     }
-    // If setting to out of stock, also make unavailable
-    if (stockStatus === 'out_of_stock') {
+    // If setting to out of stock or stock quantity is 0, also make unavailable
+    if (stockStatus === 'out_of_stock' || (stockQuantity !== null && stockQuantity <= 0)) {
       updates.isAvailable = false;
+      updates.stockStatus = 'out_of_stock';
+    }
+    // If restocking and sufficient quantity, make available
+    if (stockQuantity !== null && stockQuantity > 0 && stockStatus !== 'discontinued') {
+      updates.isAvailable = true;
+      updates.stockStatus = 'in_stock';
     }
     updateProduct(productId, updates);
   };

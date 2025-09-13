@@ -1,18 +1,21 @@
 import React from 'react';
 import { useProducts } from '../../../contexts/ProductContext';
+import { useOrders } from '../../../contexts/OrderContext';
 import { FaChartLine, FaBoxes, FaRupeeSign, FaUsers, FaArrowUp, FaArrowDown, FaEye, FaShoppingCart } from 'react-icons/fa';
 import './Analytics.css';
 
 const Analytics = () => {
   const { getAllProducts, getAvailableProducts } = useProducts();
+  const { orderStats, getRecentOrders } = useOrders();
   
   const allProducts = getAllProducts();
   const availableProducts = getAvailableProducts();
   const outOfStockProducts = allProducts.filter(p => p.stockStatus === 'out_of_stock');
   const unavailableProducts = allProducts.filter(p => !p.isAvailable);
+  const recentOrders = getRecentOrders(5);
   
-  // Calculate some analytics data
-  const totalRevenue = allProducts.reduce((sum, product) => sum + (product.price * (product.stockQuantity || 0) * 0.1), 0);
+  // Calculate some analytics data using live order data
+  const totalRevenue = orderStats.totalRevenue;
   const averagePrice = allProducts.reduce((sum, product) => sum + product.price, 0) / allProducts.length;
   const totalStock = allProducts.reduce((sum, product) => sum + (product.stockQuantity || 0), 0);
   
@@ -188,7 +191,7 @@ const Analytics = () => {
             <div className="metric-item">
               <div className="metric-icon"><FaEye /></div>
               <div className="metric-info">
-                <h4>2,847</h4>
+                <h4>{orderStats.totalViews.toLocaleString()}</h4>
                 <p>Total Views</p>
                 <small className="metric-trend positive">+15.3% this week</small>
               </div>
@@ -196,7 +199,7 @@ const Analytics = () => {
             <div className="metric-item">
               <div className="metric-icon"><FaShoppingCart /></div>
               <div className="metric-info">
-                <h4>156</h4>
+                <h4>{orderStats.totalOrders.toLocaleString()}</h4>
                 <p>Total Orders</p>
                 <small className="metric-trend positive">+8.7% this week</small>
               </div>
@@ -204,7 +207,7 @@ const Analytics = () => {
             <div className="metric-item">
               <div className="metric-icon"><FaUsers /></div>
               <div className="metric-info">
-                <h4>432</h4>
+                <h4>{orderStats.activeUsers.toLocaleString()}</h4>
                 <p>Active Users</p>
                 <small className="metric-trend positive">+12.1% this week</small>
               </div>
@@ -220,34 +223,41 @@ const Analytics = () => {
           <p>Latest product and system updates</p>
         </div>
         <div className="activity-list">
-          <div className="activity-item">
-            <div className="activity-icon new">➕</div>
-            <div className="activity-content">
-              <p><strong>New product added:</strong> Premium Mango Slices</p>
-              <small>2 hours ago</small>
-            </div>
-          </div>
-          <div className="activity-item">
-            <div className="activity-icon update">📝</div>
-            <div className="activity-content">
-              <p><strong>Price updated:</strong> Banana Chips - ₹120 to ₹115</p>
-              <small>4 hours ago</small>
-            </div>
-          </div>
-          <div className="activity-item">
-            <div className="activity-icon stock">📦</div>
-            <div className="activity-content">
-              <p><strong>Stock updated:</strong> Lemon Slices - 45 units added</p>
-              <small>6 hours ago</small>
-            </div>
-          </div>
-          <div className="activity-item">
-            <div className="activity-icon delete">🗑️</div>
-            <div className="activity-content">
-              <p><strong>Product removed:</strong> Old Ginger Flakes variant</p>
-              <small>1 day ago</small>
-            </div>
-          </div>
+          {recentOrders.length > 0 ? (
+            recentOrders.map((order, index) => (
+              <div key={order.id} className="activity-item">
+                <div className="activity-icon new">🛒</div>
+                <div className="activity-content">
+                  <p><strong>New order:</strong> ₹{order.total.toFixed(2)} - {order.items.length} item(s)</p>
+                  <small>{new Date(order.createdAt).toLocaleString()}</small>
+                </div>
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="activity-item">
+                <div className="activity-icon new">➕</div>
+                <div className="activity-content">
+                  <p><strong>New product added:</strong> Premium Mango Slices</p>
+                  <small>2 hours ago</small>
+                </div>
+              </div>
+              <div className="activity-item">
+                <div className="activity-icon update">📝</div>
+                <div className="activity-content">
+                  <p><strong>Price updated:</strong> Banana Chips - ₹120 to ₹115</p>
+                  <small>4 hours ago</small>
+                </div>
+              </div>
+              <div className="activity-item">
+                <div className="activity-icon stock">📦</div>
+                <div className="activity-content">
+                  <p><strong>Stock updated:</strong> Lemon Slices - 45 units added</p>
+                  <small>6 hours ago</small>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

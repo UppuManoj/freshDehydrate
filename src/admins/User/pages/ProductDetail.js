@@ -90,12 +90,12 @@ const ProductDetail = ({ onAddToCart }) => {
           <div className="product-price">
             <span className="current-price">₹{product.price.toFixed(2)}</span>
             {product.originalPrice && (
-              <span className="original-price">₹{product.originalPrice.toFixed(2)}</span>
-            )}
-            {product.originalPrice && (
-              <span className="discount-badge">
-                {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
-              </span>
+              <>
+                <span className="original-price">₹{product.originalPrice.toFixed(2)}</span>
+                <span className="discount-percentage">
+                  {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                </span>
+              </>
             )}
           </div>
           

@@ -165,24 +165,24 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
                 }} className="like-btn">
                   {favorites.some(item => item.id === product.id) ? <FaHeart color="red" /> : <FaRegHeart />}
                 </button>
-                {product.originalPrice && (
-                  <span className="discount-tag">
-                    -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
-                  </span>
-                )}
               </div>
               <div className="product-info">
                 <span className="product-category">{product.category}</span>
-                <StarRating rating={product.rating} />
+               
                 <h4 className="product-name">{product.name}</h4>
                 <p className="product-description">{product.description}</p>
                 <div className="product-price">
                   <span className="current-price">₹{product.price.toFixed(2)}</span>
                   {product.originalPrice && (
-                    <span className="original-price">₹{product.originalPrice.toFixed(2)}</span>
+                    <>
+                      <span className="original-price">₹{product.originalPrice.toFixed(2)}</span>
+                      <span className="discount-percentage">
+                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                      </span>
+                    </>
                   )}
-                  
                 </div>
+                <StarRating rating={product.rating} />
                 <button onClick={() => onAddToCart(product)} className="add-to-cart-btn">
                   <FaShoppingCart /> Add to Cart
                 </button>

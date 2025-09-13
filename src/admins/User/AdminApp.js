@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { ProductProvider } from '../../contexts/ProductContext';
+import { OrderProvider } from '../../contexts/OrderContext';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Home from './pages/Home';
@@ -11,8 +12,9 @@ import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import Contact from './pages/Contact';
 import Cart from './pages/Cart';
+import Payments from './pages/Payments';
 import Favorites from './pages/Favorites';
-import UserProfile from './pages/UserProfile';
+import Profile from './pages/Profile';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -39,32 +41,35 @@ function AdminApp() {
 
   return (
     <ProductProvider>
-      <Router>
-        <ScrollToTop />
-        <div className="user-app">
-          {showLogin && <Login onClose={() => setShowLogin(false)} />}
-          <Navbar 
-            isLoggedIn={!!currentUser} 
-            username={currentUser?.name || "Guest"} 
-            cartCount={cart.length} 
-            favoritesCount={favorites.length}
-            onLoginClick={() => setShowLogin(true)}
-          />
-          <main className="main-content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/products" element={<Products onAddToCart={addToCart} onToggleFavorite={toggleFavorite} favorites={favorites} />} />
-              <Route path="/products/:id" element={<ProductDetail onAddToCart={addToCart} />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/cart" element={<Cart cart={cart} setCart={setCart} isLoggedIn={!!currentUser} onLoginClick={() => setShowLogin(true)} setShowLogin={setShowLogin} />} />
-              <Route path="/favorites" element={<Favorites favorites={favorites} onToggleFavorite={toggleFavorite} onAddToCart={addToCart} />} />
-              <Route path="/profile" element={<UserProfile />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
+      <OrderProvider>
+        <Router>
+          <ScrollToTop />
+          <div className="user-app">
+            {showLogin && <Login onClose={() => setShowLogin(false)} />}
+            <Navbar 
+              isLoggedIn={!!currentUser} 
+              username={currentUser?.name || "Guest"} 
+              cartCount={cart.length} 
+              favoritesCount={favorites.length}
+              onLoginClick={() => setShowLogin(true)}
+            />
+            <main className="main-content">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/products" element={<Products onAddToCart={addToCart} onToggleFavorite={toggleFavorite} favorites={favorites} />} />
+                <Route path="/products/:id" element={<ProductDetail onAddToCart={addToCart} />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/cart" element={<Cart cart={cart} setCart={setCart} isLoggedIn={!!currentUser} onLoginClick={() => setShowLogin(true)} />} />
+                <Route path="/payments" element={<Payments />} />
+                <Route path="/favorites" element={<Favorites favorites={favorites} onToggleFavorite={toggleFavorite} onAddToCart={addToCart} />} />
+                <Route path="/profile" element={<Profile />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </OrderProvider>
     </ProductProvider>
   );
 }

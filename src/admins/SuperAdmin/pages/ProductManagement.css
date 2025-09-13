@@ -232,7 +232,8 @@
 .price-display {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
+  align-items: flex-start;
 }
 
 .current-price {
@@ -245,6 +246,20 @@
   color: #718096;
   text-decoration: line-through;
   font-size: 0.9rem;
+}
+
+.discount-percentage {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: white;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+  box-shadow: 0 1px 3px rgba(255, 107, 53, 0.3);
+  white-space: nowrap;
 }
 
 .edit-price {
