@@ -47,49 +47,6 @@ const About = () => {
         </div>
       </main>
 
-      {/* <section className="journey-section">
-        <h2>Our Journey</h2>
-        <p>From humble beginnings to serving thousands of customers</p>
-        <div className="timeline">
-          <div className="timeline-item">
-            <div className="timeline-year">2019</div>
-            <div className="timeline-content">
-              <p>Fresh Dehydrate founded with a simple mission</p>
-            </div>
-          </div>
-          <div className="timeline-item">
-            <div className="timeline-year">2020</div>
-            <div className="timeline-content">
-              <p>Launched our first product line of dehydrated fruits</p>
-            </div>
-          </div>
-          <div className="timeline-item">
-            <div className="timeline-year">2021</div>
-            <div className="timeline-content">
-              <p>Expanded to include vegetable snacks and trail mixes</p>
-            </div>
-          </div>
-          <div className="timeline-item">
-            <div className="timeline-year">2022</div>
-            <div className="timeline-content">
-              <p>Achieved organic certification for 80% of our products</p>
-            </div>
-          </div>
-          <div className="timeline-item">
-            <div className="timeline-year">2023</div>
-            <div className="timeline-content">
-              <p>Opened our second facility to meet growing demand</p>
-            </div>
-          </div>
-          <div className="timeline-item">
-            <div className="timeline-year">2024</div>
-            <div className="timeline-content">
-              <p>Serving over 10,000 happy customers nationwide</p>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
       <section className="team-section">
         <h2>Meet Our Team</h2>
         <p>The passionate people behind Fresh Dehydrate</p>

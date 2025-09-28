@@ -57,12 +57,12 @@ const Dashboard = () => {
           </div>
         </div>
         
-        <div className="dashboard-card">
-          <h3>💰 Revenue Analytics</h3>
-          <p>Sales performance and revenue</p>
+        <div className="dashboard-card" onClick={() => navigate('/sales-analytics')}>
+          <h3>💰 Sales Reports</h3>
+          <p>Detailed sales analytics and downloadable reports</p>
           <div className="stats">
-            <span>Daily Revenue: ₹12,435</span>
-            <span>Monthly: ₹3,45,678</span>
+            <span>Last 9 Months Data</span>
+            <span>Excel & PDF Export</span>
           </div>
         </div>
         

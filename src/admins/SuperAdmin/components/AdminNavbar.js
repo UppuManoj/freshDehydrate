@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaUserCircle, FaHome, FaTachometerAlt, FaClipboardList, FaBoxes, FaUsers, FaChartLine, FaBars, FaTimes } from 'react-icons/fa';
+import { FaUserCircle, FaHome, FaTachometerAlt, FaClipboardList, FaBoxes, FaUsers, FaChartLine, FaBars, FaTimes, FaChartBar } from 'react-icons/fa';
 import './AdminNavbar.css';
 
 const AdminNavbar = ({ title = "Admin Dashboard" }) => {
@@ -119,6 +119,15 @@ const AdminNavbar = ({ title = "Admin Dashboard" }) => {
               </li>
               <li>
                 <button 
+                  onClick={() => handleNavigation('/sales-analytics')} 
+                  className={`admin-nav-link ${location.pathname === '/sales-analytics' ? 'active' : ''}`}
+                >
+                  <FaChartBar className="admin-nav-icon" />
+                  Sales Reports
+                </button>
+              </li>
+              <li>
+                <button 
                   onClick={() => handleNavigation('/settings')} 
                   className={`admin-nav-link ${location.pathname === '/settings' ? 'active' : ''}`}
                 >
@@ -214,6 +223,15 @@ const AdminNavbar = ({ title = "Admin Dashboard" }) => {
             >
               <FaChartLine className="admin-nav-icon" />
               Analytics
+            </button>
+          </li>
+          <li>
+            <button 
+              onClick={() => handleNavigation('/sales-analytics')} 
+              className={`admin-nav-link ${location.pathname === '/sales-analytics' ? 'active' : ''}`}
+            >
+              <FaChartBar className="admin-nav-icon" />
+              Sales Reports
             </button>
           </li>
           <li>

@@ -7,6 +7,20 @@
   border-top: 1px solid #e9e9e9;
 }
 
+/* Hide footer on mobile when profile page is active */
+@media (max-width: 768px) {
+  .profile-page-active .footer {
+    display: none !important;
+  }
+}
+
+/* Ensure footer is hidden on all mobile sizes when profile is active */
+@media (max-width: 480px) {
+  .profile-page-active .footer {
+    display: none !important;
+  }
+}
+
 .footer-main {
   display: flex;
   justify-content: space-around;
@@ -118,6 +132,64 @@
 }
 
 /* Responsive Styles */
+/* Desktop and large screens (993px and above) - Quick Links and Categories side by side */
+@media (min-width: 993px) {
+  .footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    gap: 40px;
+  }
+
+  .footer-column.about {
+    flex: 1;
+    min-width: 280px;
+    margin: 20px 0;
+    text-align: left;
+  }
+
+  /* Side by side layout for Quick Links and Categories on desktop */
+  .footer-links-container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 60px;
+    flex: 1;
+    min-width: 400px;
+    margin: 20px 0;
+  }
+
+  .footer-links-container .footer-column {
+    flex: 1;
+    margin: 0 !important;
+    min-width: 180px !important;
+  }
+
+  .footer-links-container .footer-column.quick-links {
+    text-align: left !important;
+  }
+
+  .footer-links-container .footer-column.categories {
+    text-align: left !important;
+  }
+
+  .footer-column.contact {
+    flex: 1;
+    min-width: 280px;
+    margin: 20px 0;
+    text-align: left;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+  }
+}
+
 @media (max-width: 992px) {
   .footer-main {
     flex-direction: column;
@@ -128,6 +200,32 @@
   .footer-column {
     margin: 20px 0;
     min-width: 100%;
+  }
+
+  /* Side by side layout for Quick Links and Categories */
+  .footer-links-container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+    width: 100% !important;
+    flex-wrap: nowrap;
+  }
+
+  .footer-links-container .footer-column {
+    flex: 1;
+    margin: 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+  }
+
+  .footer-links-container .footer-column.quick-links {
+    text-align: left !important;
+  }
+
+  .footer-links-container .footer-column.categories {
+    text-align: right !important;
   }
 
   .social-icons {
@@ -147,6 +245,42 @@
 
   .footer-column {
     margin: 15px 0;
+  }
+
+  /* Side by side layout for Quick Links and Categories */
+  .footer-links-container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100% !important;
+    flex-wrap: nowrap;
+  }
+
+  .footer-links-container .footer-column {
+    flex: 1;
+    margin: 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+  }
+
+  .footer-links-container .footer-column.quick-links {
+    text-align: left !important;
+  }
+
+  .footer-links-container .footer-column.quick-links h4,
+  .footer-links-container .footer-column.quick-links ul {
+    text-align: left !important;
+  }
+
+  .footer-links-container .footer-column.categories {
+    text-align: right !important;
+  }
+
+  .footer-links-container .footer-column.categories h4,
+  .footer-links-container .footer-column.categories ul {
+    text-align: left !important;
   }
 
   .footer-logo {
@@ -188,6 +322,42 @@
   .footer-column {
     margin: 12px 0;
     min-width: 100%;
+  }
+
+  /* Side by side layout for Quick Links and Categories */
+  .footer-links-container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    width: 100% !important;
+    flex-wrap: nowrap;
+  }
+
+  .footer-links-container .footer-column {
+    flex: 1;
+    margin: 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+  }
+
+  .footer-links-container .footer-column.quick-links {
+    text-align: left !important;
+  }
+
+  .footer-links-container .footer-column.quick-links h4,
+  .footer-links-container .footer-column.quick-links ul {
+    text-align: left !important;
+  }
+
+  .footer-links-container .footer-column.categories {
+    text-align: right !important;
+  }
+
+  .footer-links-container .footer-column.categories h4,
+  .footer-links-container .footer-column.categories ul {
+    text-align: left !important;
   }
 
   .footer-logo {

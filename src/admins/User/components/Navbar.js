@@ -2,15 +2,9 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaShoppingCart, FaHeart, FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
 import './Navbar.css';
-import ProfileDropdown from './ProfileDropdown';
 
 const Navbar = ({ isLoggedIn, onLoginClick, onLogout, username, cartCount, favoritesCount }) => {
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const handleProfileClick = () => {
-    setShowProfileDropdown(prev => !prev);
-  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(prev => !prev);
@@ -51,12 +45,9 @@ const Navbar = ({ isLoggedIn, onLoginClick, onLogout, username, cartCount, favor
             {typeof cartCount === 'number' && <span className="cart-count">{cartCount}</span>}
           </NavLink>
           {isLoggedIn ? (
-            <div className="profile-icon-container">
-              <button onClick={handleProfileClick} className="icon-link profile-icon-button">
-                <FaUserCircle />
-              </button>
-              {showProfileDropdown && <ProfileDropdown username={username} onClose={() => setShowProfileDropdown(false)} />}
-            </div>
+            <NavLink to="/profile" className="icon-link profile-icon-container">
+              <FaUserCircle />
+            </NavLink>
           ) : (
             <button className="login-button-navbar" onClick={onLoginClick}>Login</button>
           )}
@@ -73,6 +64,7 @@ const Navbar = ({ isLoggedIn, onLoginClick, onLogout, username, cartCount, favor
           <li><NavLink to="/about" activeClassName="active-link" onClick={closeMobileMenu}>About</NavLink></li>
           <li><NavLink to="/products" activeClassName="active-link" onClick={closeMobileMenu}>Products</NavLink></li>
           <li><NavLink to="/contact" activeClassName="active-link" onClick={closeMobileMenu}>Contact</NavLink></li>
+          {isLoggedIn && <li><NavLink to="/profile" activeClassName="active-link" onClick={closeMobileMenu}>Profile</NavLink></li>}
         </ul>
       </div>
       {isMobileMenuOpen && <div className="menu-overlay" onClick={toggleMobileMenu}></div>}

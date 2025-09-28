@@ -18,24 +18,26 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="footer-column links quick-links">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/products">Products</Link></li>
-            <li><Link to="/about">About Us</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
-          </ul>
-        </div>
+        <div className="footer-links-container">
+          <div className="footer-column links quick-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/products">Products</Link></li>
+              <li><Link to="/about">About Us</Link></li>
+              <li><Link to="/contact">Contact</Link></li>
+            </ul>
+          </div>
 
-        <div className="footer-column links categories">
-          <h4>Categories</h4>
-          <ul>
-            <li><Link to="/products">Dehydrated Fruits</Link></li>
-            <li><Link to="/products">Dehydrated Vegetables</Link></li>
-            <li><Link to="/products">Powder</Link></li>
-            <li><Link to="/products">Organic products</Link></li>
-          </ul>
+          <div className="footer-column links categories">
+            <h4>Categories</h4>
+            <ul>
+              <li><Link to="/products">Dehydrated Fruits</Link></li>
+              <li><Link to="/products">Dehydrated Vegetables</Link></li>
+              <li><Link to="/products">Powder</Link></li>
+              <li><Link to="/products">Organic products</Link></li>
+            </ul>
+          </div>
         </div>
 
         <div className="footer-column contact">
