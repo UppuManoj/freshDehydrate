@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { ProductProvider } from '../../contexts/ProductContext';
 import { OrderProvider } from '../../contexts/OrderContext';
@@ -18,11 +18,13 @@ import Profile from './pages/Profile';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 
-function AdminApp() {
+// Component to handle route-based styling
+function AppContent() {
   const { currentUser } = useAuth();
   const [cart, setCart] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [showLogin, setShowLogin] = useState(false);
+  const location = useLocation();
 
   const addToCart = (product) => {
     setCart(prevCart => [...prevCart, product]);
@@ -39,35 +41,44 @@ function AdminApp() {
     });
   };
 
+  // Check if current route is profile page
+  const isProfilePage = location.pathname === '/profile';
+
+  return (
+    <div className={`user-app ${isProfilePage ? 'profile-page-active' : ''}`}>
+      {showLogin && <Login onClose={() => setShowLogin(false)} />}
+      <Navbar 
+        isLoggedIn={!!currentUser} 
+        username={currentUser?.name || "Guest"} 
+        cartCount={cart.length} 
+        favoritesCount={favorites.length}
+        onLoginClick={() => setShowLogin(true)}
+      />
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/products" element={<Products onAddToCart={addToCart} onToggleFavorite={toggleFavorite} favorites={favorites} />} />
+          <Route path="/products/:id" element={<ProductDetail onAddToCart={addToCart} />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/cart" element={<Cart cart={cart} setCart={setCart} isLoggedIn={!!currentUser} onLoginClick={() => setShowLogin(true)} />} />
+          <Route path="/payments" element={<Payments />} />
+          <Route path="/favorites" element={<Favorites favorites={favorites} onToggleFavorite={toggleFavorite} onAddToCart={addToCart} />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+function AdminApp() {
   return (
     <ProductProvider>
       <OrderProvider>
         <Router>
           <ScrollToTop />
-          <div className="user-app">
-            {showLogin && <Login onClose={() => setShowLogin(false)} />}
-            <Navbar 
-              isLoggedIn={!!currentUser} 
-              username={currentUser?.name || "Guest"} 
-              cartCount={cart.length} 
-              favoritesCount={favorites.length}
-              onLoginClick={() => setShowLogin(true)}
-            />
-            <main className="main-content">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/products" element={<Products onAddToCart={addToCart} onToggleFavorite={toggleFavorite} favorites={favorites} />} />
-                <Route path="/products/:id" element={<ProductDetail onAddToCart={addToCart} />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/cart" element={<Cart cart={cart} setCart={setCart} isLoggedIn={!!currentUser} onLoginClick={() => setShowLogin(true)} />} />
-                <Route path="/payments" element={<Payments />} />
-                <Route path="/favorites" element={<Favorites favorites={favorites} onToggleFavorite={toggleFavorite} onAddToCart={addToCart} />} />
-                <Route path="/profile" element={<Profile />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
+          <AppContent />
         </Router>
       </OrderProvider>
     </ProductProvider>

@@ -1,1097 +1,763 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useOrders } from '../../../contexts/OrderContext';
-import { FaUser, FaShoppingCart, FaCreditCard, FaGift, FaCog, FaEdit, FaSave, FaTimes, FaPhone, FaEnvelope, FaCalendarAlt, FaMapMarkerAlt, FaPlus, FaTrash, FaStar, FaBell, FaHeart, FaTicketAlt, FaSearch, FaFilter } from 'react-icons/fa';
+import { 
+  FaUser, 
+  FaShoppingCart, 
+  FaHeart, 
+  FaCreditCard, 
+  FaGift, 
+  FaBell, 
+  FaSignOutAlt,
+  FaEdit,
+  FaSave,
+  FaTimes,
+  FaPhone,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaChevronRight,
+  FaPlus,
+  FaTrash,
+  FaWallet,
+  FaMobile,
+  FaQrcode,
+  FaHome,
+  FaBuilding,
+  FaSearch,
+  FaShoppingBag,
+  FaCalendar,
+  FaRupeeSign
+} from 'react-icons/fa';
 import './Profile.css';
 
-const Profile = () => {
-  const { currentUser } = useAuth();
+const UserProfileDashboard = () => {
+  const { currentUser, logout } = useAuth();
   const { orders, orderStats } = useOrders();
-  const location = useLocation();
-  const [activeSection, setActiveSection] = useState('profile');
-  const [editingPersonal, setEditingPersonal] = useState(false);
-  const [editingEmail, setEditingEmail] = useState(false);
-  const [editingMobile, setEditingMobile] = useState(false);
-  const [showAddAddress, setShowAddAddress] = useState(false);
-  const [editingAddress, setEditingAddress] = useState(null);
-  const [showAddPAN, setShowAddPAN] = useState(false);
-  const [showAddGiftCard, setShowAddGiftCard] = useState(false);
-  const [showAddCard, setShowAddCard] = useState(false);
-  const [showAddUPI, setShowAddUPI] = useState(false);
+  const navigate = useNavigate();
+  const [currentActiveTab, setCurrentActiveTab] = useState('dashboard');
+  const [isEditingUserInfo, setIsEditingUserInfo] = useState(false);
+  const [showAddPaymentCard, setShowAddPaymentCard] = useState(false);
+  const [showAddUPIMethod, setShowAddUPIMethod] = useState(false);
+  const [showAddWalletMethod, setShowAddWalletMethod] = useState(false);
+  const [showAddUserAddress, setShowAddUserAddress] = useState(false);
+  const [editingAddressId, setEditingAddressId] = useState(null);
+  const [displayUPIQRCode, setDisplayUPIQRCode] = useState(false);
+  const [selectedUPIForQR, setSelectedUPIForQR] = useState(null);
+  const [orderSearchQuery, setOrderSearchQuery] = useState('');
 
-  // Handle navigation from dropdown
-  useEffect(() => {
-    if (location.state?.activeSection) {
-      setActiveSection(location.state.activeSection);
-    }
-  }, [location.state]);
-
-  // Remove functions
-  const removeUPI = (id) => {
-    setSavedUPIs(savedUPIs.filter(upi => upi.id !== id));
-  };
-
-  const removeCard = (id) => {
-    setSavedCards(savedCards.filter(card => card.id !== id));
-  };
-
-  const [profileData, setProfileData] = useState({
+  // User profile information
+  const [userProfileInfo, setUserProfileInfo] = useState({
     firstName: 'Manoj',
     lastName: 'Kumar',
-    gender: 'Male',
-    email: 'smartmanoj621@gmail.com',
-    mobile: '+916303060469',
-    dateOfBirth: '15/08/1990',
-    location: 'Bangalore, Karnataka'
+    emailAddress: 'smartmanoj621@gmail.com',
+    phoneNumber: '+916303060469',
+    birthDate: '15/08/1990',
+    currentAddress: 'Bangalore, Karnataka'
   });
 
-  const [savedUPIs, setSavedUPIs] = useState([
-    { id: 1, upiId: 'manoj@paytm', provider: 'Paytm', verified: true },
-    { id: 2, upiId: 'manojkumar@phonepe', provider: 'PhonePe', verified: true }
+  // Payment methods data
+  const [savedPaymentCards, setSavedPaymentCards] = useState([
+    { 
+      cardId: 1, 
+      cardNumber: '**** **** **** 1234', 
+      cardHolderName: 'Manoj Kumar', 
+      expiryDate: '12/25', 
+      cardType: 'Visa',
+      isDefault: true 
+    },
+    { 
+      cardId: 2, 
+      cardNumber: '**** **** **** 5678', 
+      cardHolderName: 'Manoj Kumar', 
+      expiryDate: '08/26', 
+      cardType: 'Mastercard',
+      isDefault: false 
+    }
   ]);
 
-  const [savedCards, setSavedCards] = useState([
-    { id: 1, cardNumber: '**** **** **** 1234', cardType: 'Visa', bankName: 'HDFC Bank', expiryDate: '12/25' },
-    { id: 2, cardNumber: '**** **** **** 5678', cardType: 'Mastercard', bankName: 'SBI', expiryDate: '08/26' }
+  const [savedUPIMethods, setSavedUPIMethods] = useState([
+    { 
+      upiId: 1, 
+      upiAddress: 'manoj@paytm', 
+      upiProvider: 'Paytm', 
+      isVerified: true,
+      isDefault: true 
+    },
+    { 
+      upiId: 2, 
+      upiAddress: 'manoj@phonepe', 
+      upiProvider: 'PhonePe', 
+      isVerified: true,
+      isDefault: false 
+    }
   ]);
 
-  const [addresses, setAddresses] = useState([
+  const [savedWalletMethods, setSavedWalletMethods] = useState([
+    { 
+      walletId: 1, 
+      walletName: 'Paytm Wallet', 
+      walletBalance: '₹1,250', 
+      walletProvider: 'Paytm',
+      isLinked: true 
+    },
+    { 
+      walletId: 2, 
+      walletName: 'PhonePe Wallet', 
+      walletBalance: '₹850', 
+      walletProvider: 'PhonePe',
+      isLinked: true 
+    }
+  ]);
+
+  // Sample order data - Set to empty array [] to test zero orders state
+  const [userOrderHistory, setUserOrderHistory] = useState([
     {
-      id: 1,
-      type: 'Home',
-      name: 'Manoj Kumar',
-      address: '123, MG Road, Bangalore',
-      city: 'Bangalore',
-      state: 'Karnataka',
-      pincode: '560001',
-      phone: '+916303060469',
+      orderId: 'ORD001',
+      orderDate: '2024-01-15',
+      orderStatus: 'Delivered',
+      orderTotal: 1250,
+      itemCount: 3,
+      productName: 'Dehydrated Mango Slices',
+      deliveryDate: '2024-01-18'
+    },
+    {
+      orderId: 'ORD002',
+      orderDate: '2024-01-20',
+      orderStatus: 'Shipped',
+      orderTotal: 850,
+      itemCount: 2,
+      productName: 'Mixed Vegetable Chips',
+      deliveryDate: '2024-01-23'
+    },
+    {
+      orderId: 'ORD003',
+      orderDate: '2024-01-25',
+      orderStatus: 'Processing',
+      orderTotal: 650,
+      itemCount: 1,
+      productName: 'Banana Powder',
+      deliveryDate: '2024-01-28'
+    }
+  ]);
+
+  // Address data
+  const [userAddressList, setUserAddressList] = useState([
+    {
+      addressId: 1,
+      addressType: 'Home',
+      fullName: 'Manoj Kumar',
+      phoneNumber: '+916303060469',
+      addressLine1: '123 MG Road',
+      addressLine2: 'Near City Mall',
+      cityName: 'Bangalore',
+      stateName: 'Karnataka',
+      pinCode: '560001',
       isDefault: true
     },
     {
-      id: 2,
-      type: 'Work',
-      name: 'Manoj Kumar',
-      address: '456, Tech Park, Electronic City',
-      city: 'Bangalore',
-      state: 'Karnataka',
-      pincode: '560100',
-      phone: '+916303060469',
+      addressId: 2,
+      addressType: 'Office',
+      fullName: 'Manoj Kumar',
+      phoneNumber: '+916303060469',
+      addressLine1: '456 Tech Park',
+      addressLine2: 'Electronic City',
+      cityName: 'Bangalore',
+      stateName: 'Karnataka',
+      pinCode: '560100',
       isDefault: false
     }
   ]);
 
+  const handleUserLogout = () => {
+    logout();
+    navigate('/');
+  };
 
-  const [coupons] = useState([
-    {
-      id: 1,
-      title: 'SAVE20',
-      description: 'Get 20% off on orders above ₹500',
-      discount: '20% OFF',
-      minOrder: '₹500',
-      validity: '31 Dec 2024',
-      code: 'SAVE20'
-    },
-    {
-      id: 2,
-      title: 'FREESHIP',
-      description: 'Free shipping on all orders',
-      discount: 'FREE SHIPPING',
-      minOrder: 'No minimum',
-      validity: '15 Jan 2025',
-      code: 'FREESHIP'
-    }
-  ]);
+  const handleCloseProfile = () => {
+    navigate(-1); // Go back to previous page
+  };
 
-  const [notifications] = useState([
-    {
-      id: 1,
-      type: 'Order',
-      title: 'Order Delivered Successfully',
-      message: 'Your order #FD12345 has been delivered',
-      time: '2 hours ago',
-      read: false
-    },
-    {
-      id: 2,
-      type: 'Offer',
-      title: 'Special Discount Available',
-      message: 'Get 25% off on Premium Mango Slices',
-      time: '1 day ago',
-      read: true
-    },
-    {
-      id: 3,
-      type: 'Review',
-      title: 'Rate Your Recent Purchase',
-      message: 'How was your experience with Banana Chips?',
-      time: '3 days ago',
-      read: false
-    }
-  ]);
+  const handleSaveUserProfile = () => {
+    setIsEditingUserInfo(false);
+  };
 
-  const [wishlistItems] = useState([
-    {
-      id: 1,
-      name: 'Premium Mango Slices',
-      price: 299,
-      originalPrice: 399,
-      image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-      inStock: true
-    },
-    {
-      id: 2,
-      name: 'Dried Pineapple Rings',
-      price: 249,
-      originalPrice: 329,
-      image: 'https://images.unsplash.com/photo-1589820296156-2454bb8a6ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
-      inStock: false
-    }
-  ]);
+  const removePaymentCard = (cardId) => {
+    setSavedPaymentCards(savedPaymentCards.filter(card => card.cardId !== cardId));
+  };
 
-  const sidebarItems = [
+  const removeUPIMethod = (upiId) => {
+    setSavedUPIMethods(savedUPIMethods.filter(upi => upi.upiId !== upiId));
+  };
+
+  const removeWalletMethod = (walletId) => {
+    setSavedWalletMethods(savedWalletMethods.filter(wallet => wallet.walletId !== walletId));
+  };
+
+  const removeUserAddress = (addressId) => {
+    setUserAddressList(userAddressList.filter(address => address.addressId !== addressId));
+  };
+
+ 
+
+  const navigationMenuItems = [
     { 
-      icon: <FaShoppingCart />, 
-      label: 'MY ORDERS', 
-      key: 'orders',
-      hasArrow: true 
+      tabId: 'dashboard', 
+      tabIcon: <FaUser />, 
+      tabTitle: 'Profile Dashboard', 
+      tabSubtitle: 'View and edit your personal information'
     },
-    {
-      icon: <FaUser />,
-      label: 'ACCOUNT SETTINGS',
-      key: 'account',
-      subItems: [
-        { label: 'Profile Information', key: 'profile' },
-        { label: 'Manage Addresses', key: 'addresses' },
-        { label: 'PAN Card Information', key: 'pan' }
-      ]
+    { 
+      tabId: 'orderHistory', 
+      tabIcon: <FaShoppingCart />, 
+      tabTitle: 'Order History', 
+      tabSubtitle: `${userOrderHistory.length} orders placed`
     },
-    {
-      icon: <FaCreditCard />,
-      label: 'PAYMENTS',
-      key: 'payments',
-      subItems: [
-        { label: 'Gift Cards', key: 'giftcards', value: '₹0' },
-        { label: 'Saved UPI', key: 'upi' },
-        { label: 'Saved Cards', key: 'cards' }
-      ]
+    { 
+      tabId: 'addressBook', 
+      tabIcon: <FaMapMarkerAlt />, 
+      tabTitle: 'Address Book', 
+      tabSubtitle: 'Manage your delivery addresses'
     },
-    {
-      icon: <FaGift />,
-      label: 'MY STUFF',
-      key: 'stuff',
-      subItems: [
-        { label: 'My Coupons', key: 'coupons' },
-        { label: 'My Reviews & Ratings', key: 'reviews' },
-        { label: 'All Notifications', key: 'notifications' },
-        { label: 'My Wishlist', key: 'wishlist' }
-      ]
+    { 
+      tabId: 'paymentMethods', 
+      tabIcon: <FaCreditCard />, 
+      tabTitle: 'Payment Methods', 
+      tabSubtitle: 'Manage cards, UPI, and wallets'
+    },
+    { 
+      tabId: 'wishlistItems', 
+      tabIcon: <FaHeart />, 
+      tabTitle: 'My Wishlist', 
+      tabSubtitle: 'Your favorite products',
+      actionHandler: () => navigate('/favorites')
+    },
+    { 
+      tabId: 'giftCardsVouchers', 
+      tabIcon: <FaGift />, 
+      tabTitle: 'Gift Cards & Vouchers', 
+      tabSubtitle: 'View your gift cards and vouchers'
+    },
+    { 
+      tabId: 'notificationSettings', 
+      tabIcon: <FaBell />, 
+      tabTitle: 'Notification Settings', 
+      tabSubtitle: 'Manage your notification preferences'
     }
   ];
 
-  const handleEdit = (section) => {
-    if (section === 'personal') setEditingPersonal(true);
-    if (section === 'email') setEditingEmail(true);
-    if (section === 'mobile') setEditingMobile(true);
-  };
+  const renderUserDashboard = () => (
+    <div className="user-profile-dashboard">
+      <div className="user-profile-header-section">
+        <div className="user-profile-avatar-container">
+          <FaUser />
+        </div>
+        <div className="user-profile-information">
+          <h2>{userProfileInfo.firstName} {userProfileInfo.lastName}</h2>
+          <p>{userProfileInfo.emailAddress}</p>
+        </div>
+        <button 
+          className="edit-user-profile-button"
+          onClick={() => setIsEditingUserInfo(!isEditingUserInfo)}
+        >
+          {isEditingUserInfo ? <FaTimes /> : <FaEdit />}
+        </button>
+      </div>
 
-  const handleSave = (section) => {
-    if (section === 'personal') setEditingPersonal(false);
-    if (section === 'email') setEditingEmail(false);
-    if (section === 'mobile') setEditingMobile(false);
-    // Here you would typically save to backend
-  };
-
-  const handleCancel = (section) => {
-    if (section === 'personal') setEditingPersonal(false);
-    if (section === 'email') setEditingEmail(false);
-    if (section === 'mobile') setEditingMobile(false);
-  };
-
-  const handleInputChange = (field, value) => {
-    setProfileData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const renderPersonalInformation = () => (
-    <div className="profile-section">
-      <div className="section-header">
+      <div className="user-profile-details-section">
         <h3>Personal Information</h3>
-        {!editingPersonal ? (
-          <button className="edit-btn" onClick={() => handleEdit('personal')}>
-            Edit
-          </button>
-        ) : (
-          <div className="edit-actions">
-            <button className="save-btn" onClick={() => handleSave('personal')}>
-              <FaSave /> Save
-            </button>
-            <button className="cancel-btn" onClick={() => handleCancel('personal')}>
-              <FaTimes /> Cancel
-            </button>
-          </div>
-        )}
-      </div>
-
-      <div className="form-row">
-        <div className="form-group">
-          <input
-            type="text"
-            value={profileData.firstName}
-            onChange={(e) => handleInputChange('firstName', e.target.value)}
-            disabled={!editingPersonal}
-            placeholder="First Name"
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="text"
-            value={profileData.lastName}
-            onChange={(e) => handleInputChange('lastName', e.target.value)}
-            disabled={!editingPersonal}
-            placeholder="Last Name"
-          />
-        </div>
-      </div>
-
-      <div className="gender-section">
-        <label>Your Gender</label>
-        <div className="gender-options">
-          <label className="radio-option">
-            <input
-              type="radio"
-              name="gender"
-              value="Male"
-              checked={profileData.gender === 'Male'}
-              onChange={(e) => handleInputChange('gender', e.target.value)}
-              disabled={!editingPersonal}
-            />
-            Male
-          </label>
-          <label className="radio-option">
-            <input
-              type="radio"
-              name="gender"
-              value="Female"
-              checked={profileData.gender === 'Female'}
-              onChange={(e) => handleInputChange('gender', e.target.value)}
-              disabled={!editingPersonal}
-            />
-            Female
-          </label>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderEmailAddress = () => (
-    <div className="profile-section">
-      <div className="section-header">
-        <h3>Email Address</h3>
-        {!editingEmail ? (
-          <button className="edit-btn" onClick={() => handleEdit('email')}>
-            Edit
-          </button>
-        ) : (
-          <div className="edit-actions">
-            <button className="save-btn" onClick={() => handleSave('email')}>
-              <FaSave /> Save
-            </button>
-            <button className="cancel-btn" onClick={() => handleCancel('email')}>
-              <FaTimes /> Cancel
-            </button>
-          </div>
-        )}
-      </div>
-
-      <div className="form-group">
-        <input
-          type="email"
-          value={profileData.email}
-          onChange={(e) => handleInputChange('email', e.target.value)}
-          disabled={!editingEmail}
-          placeholder="Email Address"
-        />
-      </div>
-    </div>
-  );
-
-  const renderMobileNumber = () => (
-    <div className="profile-section">
-      <div className="section-header">
-        <h3>Mobile Number</h3>
-        {!editingMobile ? (
-          <button className="edit-btn" onClick={() => handleEdit('mobile')}>
-            Edit
-          </button>
-        ) : (
-          <div className="edit-actions">
-            <button className="save-btn" onClick={() => handleSave('mobile')}>
-              <FaSave /> Save
-            </button>
-            <button className="cancel-btn" onClick={() => handleCancel('mobile')}>
-              <FaTimes /> Cancel
-            </button>
-          </div>
-        )}
-      </div>
-
-      <div className="form-group">
-        <input
-          type="tel"
-          value={profileData.mobile}
-          onChange={(e) => handleInputChange('mobile', e.target.value)}
-          disabled={!editingMobile}
-          placeholder="Mobile Number"
-        />
-      </div>
-    </div>
-  );
-
-  const renderFAQs = () => (
-    <div className="profile-section">
-      <h3>FAQs</h3>
-      <div className="faq-list">
-        <div className="faq-item">
-          <h4>What happens when I update my email address (or mobile number)?</h4>
-          <p>Your login email id (or mobile number) changes, likewise. You'll receive all your account related communication on your updated email address (or mobile number).</p>
-        </div>
-        <div className="faq-item">
-          <h4>When will my Fresh Dehydrate account be updated with the new email address (or mobile number)?</h4>
-          <p>It happens as soon as you confirm the verification code sent to your email (or mobile) and save the changes.</p>
-        </div>
-        <div className="faq-item">
-          <h4>What happens to my existing Fresh Dehydrate account when I update my email address (or mobile number)?</h4>
-          <p>Updating your email address (or mobile number) doesn't invalidate your account. Your account remains fully functional. You'll continue seeing your Order history, saved information and personal details.</p>
-        </div>
-        <div className="faq-item">
-          <h4>Does my Seller account get affected when I update my email address?</h4>
-          <p>Fresh Dehydrate has a 'single sign-on' policy. Any changes will reflect in your Seller account also.</p>
-        </div>
-      </div>
-      
-      <div className="account-actions">
-        <button className="deactivate-btn">Deactivate Account</button>
-        <button className="delete-btn">Delete Account</button>
-      </div>
-    </div>
-  );
-
-  const renderOrders = () => (
-    <div className="profile-section">
-      <div className="section-header">
-        <h3>My Orders</h3>
-        <div className="order-filters">
-          <FaSearch />
-          <input type="text" placeholder="Search in orders" />
-        </div>
-      </div>
-      
-      <div className="orders-content">
-        {orders && orders.length > 0 ? (
-          orders.slice(0, 5).map((order) => (
-            <div key={order.id} className="order-item">
-              <div className="order-header">
-                <div className="order-info">
-                  <span className="order-id">Order #{order.id}</span>
-                  <span className="order-date">{new Date(order.createdAt).toLocaleDateString()}</span>
+        <div className="user-details-grid">
+          <div className="user-detail-item">
+            <FaUser className="user-detail-icon" />
+            <div className="user-detail-content">
+              <label>Full Name</label>
+              {isEditingUserInfo ? (
+                <div className="edit-user-name-container">
+                  <input
+                    type="text"
+                    value={userProfileInfo.firstName}
+                    onChange={(e) => setUserProfileInfo({...userProfileInfo, firstName: e.target.value})}
+                    placeholder="First Name"
+                  />
+                  <input
+                    type="text"
+                    value={userProfileInfo.lastName}
+                    onChange={(e) => setUserProfileInfo({...userProfileInfo, lastName: e.target.value})}
+                    placeholder="Last Name"
+                  />
                 </div>
-                <span className={`order-status ${order.status}`}>{order.status}</span>
-              </div>
-              <div className="order-items">
-                {order.items.slice(0, 2).map((item, index) => (
-                  <div key={index} className="order-product">
-                    <img src={item.image} alt={item.name} />
-                    <div className="product-details">
-                      <h4>{item.name}</h4>
-                      <p>Qty: {item.quantity} | ₹{item.price}</p>
-                    </div>
-                  </div>
-                ))}
-                {order.items.length > 2 && (
-                  <div className="more-items">+{order.items.length - 2} more items</div>
-                )}
-              </div>
-              <div className="order-footer">
-                <span className="order-total">Total: ₹{order.total}</span>
-                <div className="order-actions">
-                  <button className="track-btn">Track Order</button>
-                  <button className="invoice-btn">Download Invoice</button>
-                </div>
-              </div>
+              ) : (
+                <span>{userProfileInfo.firstName} {userProfileInfo.lastName}</span>
+              )}
             </div>
-          ))
-        ) : (
-          <div className="empty-state">
-            <FaShoppingCart className="empty-icon" />
-            <h3>No orders yet</h3>
-            <p>Looks like you haven't placed any orders yet. Start shopping to see your orders here.</p>
+          </div>
+
+          <div className="user-detail-item">
+            <FaEnvelope className="user-detail-icon" />
+            <div className="user-detail-content">
+              <label>Email Address</label>
+              {isEditingUserInfo ? (
+                <input
+                  type="email"
+                  value={userProfileInfo.emailAddress}
+                  onChange={(e) => setUserProfileInfo({...userProfileInfo, emailAddress: e.target.value})}
+                />
+              ) : (
+                <span>{userProfileInfo.emailAddress}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="user-detail-item">
+            <FaPhone className="user-detail-icon" />
+            <div className="user-detail-content">
+              <label>Phone Number</label>
+              {isEditingUserInfo ? (
+                <input
+                  type="tel"
+                  value={userProfileInfo.phoneNumber}
+                  onChange={(e) => setUserProfileInfo({...userProfileInfo, phoneNumber: e.target.value})}
+                />
+              ) : (
+                <span>{userProfileInfo.phoneNumber}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="user-detail-item">
+            <FaCalendarAlt className="user-detail-icon" />
+            <div className="user-detail-content">
+              <label>Date of Birth</label>
+              {isEditingUserInfo ? (
+                <input
+                  type="date"
+                  value={userProfileInfo.birthDate}
+                  onChange={(e) => setUserProfileInfo({...userProfileInfo, birthDate: e.target.value})}
+                />
+              ) : (
+                <span>{userProfileInfo.birthDate}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="user-detail-item">
+            <FaMapMarkerAlt className="user-detail-icon" />
+            <div className="user-detail-content">
+              <label>Current Address</label>
+              {isEditingUserInfo ? (
+                <textarea
+                  value={userProfileInfo.currentAddress}
+                  onChange={(e) => setUserProfileInfo({...userProfileInfo, currentAddress: e.target.value})}
+                  rows="2"
+                />
+              ) : (
+                <span>{userProfileInfo.currentAddress}</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {isEditingUserInfo && (
+          <div className="user-edit-actions-container">
+            <button className="save-user-profile-button" onClick={handleSaveUserProfile}>
+              <FaSave /> Save Changes
+            </button>
+            <button className="cancel-user-edit-button" onClick={() => setIsEditingUserInfo(false)}>
+              <FaTimes /> Cancel
+            </button>
           </div>
         )}
       </div>
-    </div>
-  );
 
-  const renderAddresses = () => (
-    <div className="profile-section">
-      <div className="section-header">
-        <h3>Manage Addresses</h3>
-        <button className="add-btn" onClick={() => setShowAddAddress(true)}>
-          <FaPlus /> Add New Address
-        </button>
-      </div>
-      
-      <div className="addresses-grid">
-        {addresses.map((address) => (
-          <div key={address.id} className="address-card">
-            <div className="address-header">
-              <div className="address-type">
-                <span className="type-badge">{address.type}</span>
-                {address.isDefault && <span className="default-badge">Default</span>}
-              </div>
-              <div className="address-actions">
-                <button onClick={() => setEditingAddress(address.id)}>
-                  <FaEdit />
-                </button>
-                <button onClick={() => handleDeleteAddress(address.id)}>
-                  <FaTrash />
-                </button>
-              </div>
-            </div>
-            <div className="address-details">
-              <h4>{address.name}</h4>
-              <p>{address.address}</p>
-              <p>{address.city}, {address.state} - {address.pincode}</p>
-              <p>Mobile: {address.phone}</p>
+      <div className="user-quick-statistics">
+        <h3>Quick Statistics</h3>
+        <div className="user-stats-grid">
+          <div className="user-stat-card">
+            <FaShoppingCart />
+            <div>
+              <span className="user-stat-number">{orderStats?.totalOrders || 0}</span>
+              <span className="user-stat-label">Total Orders</span>
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderPayments = () => (
-    <div className="profile-section">
-      <div className="section-header">
-        <h3>Saved Payment Methods</h3>
-        <button className="add-btn" onClick={() => setShowAddCard(true)}>
-          <FaPlus /> Add New Card
-        </button>
-      </div>
-      
-      <div className="payment-methods">
-        <div className="gift-cards">
-          <h4>Gift Cards</h4>
-          <div className="gift-card-balance">
+          <div className="user-stat-card">
+            <FaHeart />
+            <div>
+              <span className="user-stat-number">12</span>
+              <span className="user-stat-label">Wishlist Items</span>
+            </div>
+          </div>
+          <div className="user-stat-card">
             <FaGift />
-            <span>₹0</span>
-            <button className="add-gift-card" onClick={() => setShowAddGiftCard(true)}>Add Gift Card</button>
+            <div>
+              <span className="user-stat-number">₹500</span>
+              <span className="user-stat-label">Gift Card Balance</span>
+            </div>
           </div>
         </div>
-        
-        <div className="saved-cards">
-          <h4>Saved Cards</h4>
-          {savedCards.map((card) => (
-            <div key={card.id} className="card-item">
-              <div className="card-info">
-                <FaCreditCard />
-                <div className="card-details">
-                  <span className="card-number">{card.cardNumber}</span>
-                  <span className="card-bank">{card.bankName} {card.cardType}</span>
-                  <span className="card-expiry">Expires {card.expiryDate}</span>
+      </div>
+    </div>
+  );
+
+  const renderPaymentMethodsSection = () => (
+    <div className="payment-methods-section">
+      <h2>Payment Methods</h2>
+      <p>Manage your saved payment methods including cards, UPI, and wallets.</p>
+
+      {/* Credit/Debit Cards */}
+      <div className="payment-category-container">
+        <div className="payment-category-header">
+          <h3><FaCreditCard /> Credit & Debit Cards</h3>
+          <button className="add-payment-method-button" onClick={() => setShowAddPaymentCard(true)}>
+            <FaPlus /> Add Card
+          </button>
+        </div>
+        <div className="payment-methods-grid">
+          {savedPaymentCards.map(card => (
+            <div key={card.cardId} className="payment-method-card">
+              <div className="payment-card-info">
+                <div className="payment-card-number">{card.cardNumber}</div>
+                <div className="payment-card-details">
+                  <span>{card.cardHolderName}</span>
+                  <span>{card.expiryDate}</span>
+                  <span className="payment-card-type">{card.cardType}</span>
                 </div>
+                {card.isDefault && <span className="default-payment-badge">Default</span>}
               </div>
-              <button className="remove-card" onClick={() => removeCard(card.id)}>
+              <button className="remove-payment-button" onClick={() => removePaymentCard(card.cardId)}>
                 <FaTrash />
               </button>
             </div>
           ))}
-          {savedCards.length === 0 && (
-            <div className="no-cards-message">
-              <p>No cards saved. Add your card for faster payments.</p>
+        </div>
+      </div>
+
+      {/* UPI Methods */}
+      <div className="payment-category-container">
+        <div className="payment-category-header">
+          <h3><FaMobile /> UPI Methods</h3>
+          <button className="add-payment-method-button" onClick={() => setShowAddUPIMethod(true)}>
+            <FaPlus /> Add UPI
+          </button>
+        </div>
+        <div className="payment-methods-grid">
+          {savedUPIMethods.map(upi => (
+            <div key={upi.upiId} className="payment-method-card">
+              <div className="payment-card-info">
+                <div className="upi-address">{upi.upiAddress}</div>
+                <div className="upi-provider">{upi.upiProvider}</div>
+                {upi.isVerified && <span className="verified-upi-badge">Verified</span>}
+                {upi.isDefault && <span className="default-payment-badge">Default</span>}
+              </div>
+              <div className="upi-actions">
+                {/* <button className="show-qr-button" onClick={() => showUPIQRCode(upi)}>
+                  <FaQrcode />
+                </button> */}
+                <button className="remove-payment-button" onClick={() => removeUPIMethod(upi.upiId)}>
+                  <FaTrash />
+                </button>
+              </div>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
+
+      {/* Wallet Methods */}
+      <div className="payment-category-container">
+        <div className="payment-category-header">
+          <h3><FaWallet /> Digital Wallets</h3>
+          <button className="add-payment-method-button" onClick={() => setShowAddWalletMethod(true)}>
+            <FaPlus /> Add Wallet
+          </button>
+        </div>
+        <div className="payment-methods-grid">
+          {savedWalletMethods.map(wallet => (
+            <div key={wallet.walletId} className="payment-method-card">
+              <div className="payment-card-info">
+                <div className="wallet-name">{wallet.walletName}</div>
+                <div className="wallet-balance">{wallet.walletBalance}</div>
+                <div className="wallet-provider">{wallet.walletProvider}</div>
+                {wallet.isLinked && <span className="linked-wallet-badge">Linked</span>}
+              </div>
+              <button className="remove-payment-button" onClick={() => removeWalletMethod(wallet.walletId)}>
+                <FaTrash />
+              </button>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 
-  const renderCoupons = () => (
-    <div className="profile-section">
-      <div className="section-header">
-        <h3>My Coupons</h3>
-        <span className="coupon-count">{coupons.length} Available</span>
-      </div>
-      
-      <div className="coupons-grid">
-        {coupons.map((coupon) => (
-          <div key={coupon.id} className="coupon-card">
-            <div className="coupon-discount">
-              {coupon.discount}
-            </div>
-            <div className="coupon-details">
-              <h4>{coupon.title}</h4>
-              <p>{coupon.description}</p>
-              <div className="coupon-terms">
-                <span>Min Order: {coupon.minOrder}</span>
-                <span>Valid till: {coupon.validity}</span>
-              </div>
-              <div className="coupon-code">
-                Code: <strong>{coupon.code}</strong>
-              </div>
-            </div>
-            <button className="use-coupon">Use Now</button>
+  const renderOrderHistorySection = () => {
+    // Filter orders based on search query
+    const filteredOrders = userOrderHistory.filter(order => 
+      order.orderId.toLowerCase().includes(orderSearchQuery.toLowerCase()) ||
+      order.productName.toLowerCase().includes(orderSearchQuery.toLowerCase()) ||
+      order.orderStatus.toLowerCase().includes(orderSearchQuery.toLowerCase())
+    );
+
+    return (
+      <div className="order-history-section">
+        <div className="order-section-header">
+          <h2>Order History</h2>
+          <div className="order-search-container">
+            <FaSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search orders by ID, product, or status..."
+              value={orderSearchQuery}
+              onChange={(e) => setOrderSearchQuery(e.target.value)}
+              className="order-search-input"
+            />
           </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+        <p>Track and manage all your orders in one place.</p>
 
-  const renderNotifications = () => (
-    <div className="profile-section">
-      <div className="section-header">
-        <h3>All Notifications</h3>
-        <button className="mark-all-read">Mark all as read</button>
-      </div>
-      
-      <div className="notifications-list">
-        {notifications.map((notification) => (
-          <div key={notification.id} className={`notification-item ${!notification.read ? 'unread' : ''}`}>
-            <div className="notification-icon">
-              {notification.type === 'Order' && <FaShoppingCart />}
-              {notification.type === 'Offer' && <FaGift />}
-              {notification.type === 'Review' && <FaStar />}
-            </div>
-            <div className="notification-content">
-              <h4>{notification.title}</h4>
-              <p>{notification.message}</p>
-              <span className="notification-time">{notification.time}</span>
-            </div>
-            {!notification.read && <div className="unread-dot"></div>}
+        {userOrderHistory.length === 0 ? (
+          <div className="no-orders-container">
+            <FaShoppingBag size={64} />
+            <h3>No Orders Yet</h3>
+            <p>You haven't initiated any orders yet. Start shopping to see your order history here!</p>
+            <button className="start-shopping-button" onClick={() => navigate('/products')}>
+              Start Shopping
+            </button>
           </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderWishlist = () => (
-    <div className="profile-section">
-      <div className="section-header">
-        <h3>My Wishlist</h3>
-        <span className="wishlist-count">{wishlistItems.length} Items</span>
-      </div>
-      
-      <div className="wishlist-grid">
-        {wishlistItems.map((item) => (
-          <div key={item.id} className="wishlist-item">
-            <div className="item-image">
-              <img src={item.image} alt={item.name} />
-              {!item.inStock && <div className="out-of-stock-overlay">Out of Stock</div>}
-            </div>
-            <div className="item-details">
-              <h4>{item.name}</h4>
-              <div className="item-price">
-                <span className="current-price">₹{item.price}</span>
-                {item.originalPrice && (
-                  <span className="original-price">₹{item.originalPrice}</span>
-                )}
-              </div>
-              <div className="item-actions">
-                <button className="add-to-cart" disabled={!item.inStock}>
-                  Add to Cart
-                </button>
-                <button className="remove-wishlist">
-                  <FaHeart />
-                </button>
-              </div>
-            </div>
+        ) : filteredOrders.length === 0 ? (
+          <div className="no-search-results">
+            <FaSearch size={48} />
+            <h3>No Orders Found</h3>
+            <p>No orders match your search criteria. Try different keywords.</p>
           </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const handleDeleteAddress = (addressId) => {
-    setAddresses(addresses.filter(addr => addr.id !== addressId));
-  };
-
-  return (
-    <div className="profile-page">
-      <div className="profile-container">
-        {/* Sidebar */}
-        <div className="profile-sidebar">
-          <div className="user-greeting">
-            <div className="user-avatar">
-              <FaUser />
-            </div>
-            <div className="greeting-text">
-              <span className="greeting">Hello,</span>
-              <strong>{profileData.firstName} {profileData.lastName}</strong>
-            </div>
-          </div>
-
-          <div className="sidebar-menu">
-            {sidebarItems.map((item) => (
-              <div key={item.key} className="menu-section">
-                <div 
-                  className={`menu-item ${activeSection === item.key ? 'active' : ''} ${item.subItems ? 'non-clickable' : ''}`}
-                  onClick={() => !item.subItems && setActiveSection(item.key)}
-                >
-                  <span className="menu-icon">{item.icon}</span>
-                  <span className="menu-label">{item.label}</span>
-                  {item.hasArrow && <span className="menu-arrow">›</span>}
-                </div>
-                
-                {item.subItems && (
-                  <div className="submenu">
-                    {item.subItems.map((subItem) => (
-                      <div
-                        key={subItem.key}
-                        className={`submenu-item ${activeSection === subItem.key ? 'active' : ''}`}
-                        onClick={() => setActiveSection(subItem.key)}
-                      >
-                        <span className="submenu-label">{subItem.label}</span>
-                        {subItem.value && <span className="submenu-value">{subItem.value}</span>}
-                      </div>
-                    ))}
+        ) : (
+          <div className="orders-grid">
+            {filteredOrders.map(order => (
+              <div key={order.orderId} className="order-card">
+                <div className="order-header">
+                  <div className="order-id-date">
+                    <span className="order-id">#{order.orderId}</span>
+                    <span className="order-date">
+                      <FaCalendar /> {new Date(order.orderDate).toLocaleDateString()}
+                    </span>
                   </div>
-                )}
+                  <span className={`order-status status-${order.orderStatus.toLowerCase()}`}>
+                    {order.orderStatus}
+                  </span>
+                </div>
+                <div className="order-details">
+                  <div className="order-product">
+                    <FaShoppingBag />
+                    <div>
+                      <div className="product-name">{order.productName}</div>
+                      <div className="item-count">{order.itemCount} item{order.itemCount > 1 ? 's' : ''}</div>
+                    </div>
+                  </div>
+                  <div className="order-total">
+                    <FaRupeeSign />
+                    <span>₹{order.orderTotal}</span>
+                  </div>
+                </div>
+                <div className="order-footer">
+                  <span className="delivery-date">
+                    Expected delivery: {new Date(order.deliveryDate).toLocaleDateString()}
+                  </span>
+                  <div className="order-actions">
+                    <button className="track-order-button">Track Order</button>
+                    <button className="view-details-button">View Details</button>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
+        )}
+      </div>
+    );
+  };
 
-          <div className="sidebar-footer">
-            <div className="footer-links">
-              <span>Frequently Visited:</span>
-              <a href="#track">Track Order</a>
-              <a href="#help">Help Center</a>
+  const renderAddressBookSection = () => (
+    <div className="address-book-section">
+      <div className="address-section-header">
+        <h2>Address Book</h2>
+        <button className="add-address-button" onClick={() => setShowAddUserAddress(true)}>
+          <FaPlus /> Add New Address
+        </button>
+      </div>
+      <p>Manage your delivery addresses for faster checkout.</p>
+
+      <div className="user-addresses-grid">
+        {userAddressList.map(address => (
+          <div key={address.addressId} className="user-address-card">
+            <div className="address-type-header">
+              <span className="address-type-icon">
+                {address.addressType === 'Home' ? <FaHome /> : <FaBuilding />}
+              </span>
+              <span className="address-type-label">{address.addressType}</span>
+              {address.isDefault && <span className="default-address-badge">Default</span>}
             </div>
-            <div className="logout-section">
-              <FaCog />
-              <span>Logout</span>
+            <div className="address-details">
+              <div className="address-name">{address.fullName}</div>
+              <div className="address-phone">{address.phoneNumber}</div>
+              <div className="address-lines">
+                <div>{address.addressLine1}</div>
+                <div>{address.addressLine2}</div>
+                <div>{address.cityName}, {address.stateName} - {address.pinCode}</div>
+              </div>
+            </div>
+            <div className="address-actions">
+              <button className="edit-address-button" onClick={() => setEditingAddressId(address.addressId)}>
+                <FaEdit />
+              </button>
+              <button className="remove-address-button" onClick={() => removeUserAddress(address.addressId)}>
+                <FaTrash />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderTabContent = () => {
+    switch (currentActiveTab) {
+      case 'dashboard':
+        return renderUserDashboard();
+      case 'orderHistory':
+        return renderOrderHistorySection();
+      case 'paymentMethods':
+        return renderPaymentMethodsSection();
+      case 'addressBook':
+        return renderAddressBookSection();
+      case 'giftCardsVouchers':
+        return (
+          <div className="tab-content-section">
+            <h2>Gift Cards & Vouchers</h2>
+            <p>View and manage your gift cards and promotional vouchers.</p>
+            <div className="coming-soon-container">
+              <FaGift size={48} />
+              <p>Gift card management coming soon!</p>
+            </div>
+          </div>
+        );
+      case 'notificationSettings':
+        return (
+          <div className="tab-content-section">
+            <h2>Notification Settings</h2>
+            <p>Manage how you want to receive notifications.</p>
+            <div className="coming-soon-container">
+              <FaBell size={48} />
+              <p>Notification settings coming soon!</p>
+            </div>
+          </div>
+        );
+      default:
+        return renderUserDashboard();
+    }
+  };
+
+  return (
+    <div className="user-profile-page">
+      <div className="user-profile-container">
+        {/* Profile Sidebar */}
+        <div className="user-profile-sidebar">
+          <div className="user-greeting-section">
+            <div className="user-avatar-display">
+              <FaUser />
+            </div>
+            <div className="user-greeting-text">
+              <span className="user-greeting">Hello,</span>
+              <span className="user-display-name">{userProfileInfo.firstName}</span>
+            </div>
+            <button className="close-profile-button" onClick={handleCloseProfile}>
+              <FaTimes />
+            </button>
+          </div>
+
+          <div className="user-profile-navigation">
+            {navigationMenuItems.map((menuItem) => (
+              <div
+                key={menuItem.tabId}
+                className={`navigation-menu-item ${currentActiveTab === menuItem.tabId ? 'active' : ''}`}
+                onClick={() => {
+                  if (menuItem.actionHandler) {
+                    menuItem.actionHandler();
+                  } else {
+                    setCurrentActiveTab(menuItem.tabId);
+                  }
+                }}
+              >
+                <div className="menu-item-content-wrapper">
+                  <span className="menu-item-icon">{menuItem.tabIcon}</span>
+                  <div className="menu-item-text-content">
+                    <span className="menu-item-title">{menuItem.tabTitle}</span>
+                    <span className="menu-item-subtitle">{menuItem.tabSubtitle}</span>
+                  </div>
+                </div>
+                <FaChevronRight className="menu-navigation-arrow" />
+              </div>
+            ))}
+            
+            <div className="menu-section-divider"></div>
+            
+            <div className="navigation-menu-item logout-menu-item" onClick={handleUserLogout}>
+              <div className="menu-item-content-wrapper">
+                <span className="menu-item-icon"><FaSignOutAlt /></span>
+                <div className="menu-item-text-content">
+                  <span className="menu-item-title">Logout</span>
+                  <span className="menu-item-subtitle">Sign out of your account</span>
+                </div>
+              </div>
+              <FaChevronRight className="menu-navigation-arrow" />
             </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="profile-content">
-          {activeSection === 'profile' && (
-            <>
-              {renderPersonalInformation()}
-              {renderEmailAddress()}
-              {renderMobileNumber()}
-              {renderFAQs()}
-            </>
-          )}
-          
-            {activeSection === 'orders' && renderOrders()}
-          {activeSection === 'addresses' && renderAddresses()}
-          {activeSection === 'pan' && (
-            <div className="profile-section">
-              <div className="section-header">
-                <h3>PAN Card Information</h3>
-                <button className="add-btn" onClick={() => setShowAddPAN(true)}>
-                  <FaPlus /> Add PAN Card
-                </button>
-              </div>
-              <div className="pan-info">
-                <p>Your PAN card details are used for tax purposes and order verification.</p>
-                <div className="pan-benefits">
-                  <h4>Benefits of adding PAN:</h4>
-                  <ul>
-                    <li>Faster checkout process</li>
-                    <li>Easy returns and refunds</li>
-                    <li>Tax invoice generation</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {activeSection === 'giftcards' && (
-            <div className="profile-section">
-              <div className="section-header">
-                <h3>Gift Cards</h3>
-                <span className="gift-balance">Balance: ₹0</span>
-              </div>
-              <div className="gift-card-content">
-                <div className="gift-card-balance-display">
-                  <FaGift className="gift-icon" />
-                  <div className="balance-info">
-                    <h4>Total Gift Card Balance</h4>
-                    <span className="balance-amount">₹0</span>
-                  </div>
-                </div>
-                <button className="add-gift-card-btn" onClick={() => setShowAddGiftCard(true)}>Add Gift Card</button>
-              </div>
-            </div>
-          )}
-          
-          {activeSection === 'upi' && (
-            <div className="profile-section">
-              <div className="section-header">
-                <h3>Saved UPI</h3>
-                <button className="add-btn" onClick={() => setShowAddUPI(true)}>
-                  <FaPlus /> Add UPI ID
-                </button>
-              </div>
-              <div className="upi-list">
-                {savedUPIs.map((upi) => (
-                  <div key={upi.id} className="upi-item">
-                    <FaCreditCard />
-                    <div className="upi-details">
-                      <span className="upi-id">{upi.upiId}</span>
-                      <span className="upi-provider">{upi.provider}</span>
-                      {upi.verified && <span className="verified-badge">Verified</span>}
-                    </div>
-                    <button className="remove-btn" onClick={() => removeUPI(upi.id)}>Remove</button>
-                  </div>
-                ))}
-                {savedUPIs.length === 0 && (
-                  <div className="no-upi-message">
-                    <p>No UPI IDs saved. Add your UPI ID for faster payments.</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-          
-          {activeSection === 'cards' && renderPayments()}
-          {activeSection === 'coupons' && renderCoupons()}
-          {activeSection === 'reviews' && (
-            <div className="profile-section">
-              <div className="section-header">
-                <h3>My Reviews & Ratings</h3>
-                <span className="review-count">3 Reviews</span>
-              </div>
-              <div className="reviews-list">
-                <div className="review-item">
-                  <div className="product-info">
-                    <img src="https://images.unsplash.com/photo-1553279768-865429fa0078?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Product" />
-                    <div className="product-details">
-                      <h4>Premium Mango Slices</h4>
-                      <p>Purchased on 15 Dec 2024</p>
-                    </div>
-                  </div>
-                  <div className="rating">
-                    <div className="stars">
-                      {[1,2,3,4,5].map(star => (
-                        <FaStar key={star} className="star filled" />
-                      ))}
-                    </div>
-                    <p>"Excellent quality and taste! Highly recommended."</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {activeSection === 'notifications' && renderNotifications()}
-          {activeSection === 'wishlist' && renderWishlist()}
+        {/* Main Content Area */}
+        <div className="user-profile-main-content">
+          {renderTabContent()}
         </div>
       </div>
 
-      {/* Add PAN Card Modal */}
-      {showAddPAN && (
-        <div className="modal-overlay" onClick={() => setShowAddPAN(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add PAN Card</h3>
-              <button className="modal-close" onClick={() => setShowAddPAN(false)}>
+      {/* Add Payment Card Modal */}
+      {showAddPaymentCard && (
+        <div className="modal-overlay-background" onClick={() => setShowAddPaymentCard(false)}>
+          <div className="payment-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="payment-modal-header">
+              <h3>Add New Payment Card</h3>
+              <button className="modal-close-button" onClick={() => setShowAddPaymentCard(false)}>
                 <FaTimes />
               </button>
             </div>
-            <div className="modal-content">
-              <form onSubmit={(e) => { e.preventDefault(); setShowAddPAN(false); }}>
-                <div className="form-group">
-                  <label>PAN Number *</label>
-                  <input
-                    type="text"
-                    placeholder="ABCDE1234F"
-                    pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
-                    maxLength="10"
-                    style={{ textTransform: 'uppercase' }}
-                    required
-                  />
-                  <small>Enter your 10-digit PAN number (e.g. ABCDE1234F)</small>
-                </div>
-                <div className="form-group">
-                  <label>Full Name (as per PAN) *</label>
-                  <input
-                    type="text"
-                    placeholder="Full name as mentioned in PAN card"
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Date of Birth *</label>
-                  <input
-                    type="date"
-                    required
-                  />
-                </div>
-                <div className="modal-actions">
-                  <button type="button" className="cancel-btn" onClick={() => setShowAddPAN(false)}>
-                    Cancel
-                  </button>
-                  <button type="submit" className="save-btn">
-                    Add PAN Card
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Address Modal */}
-      {showAddAddress && (
-        <div className="modal-overlay" onClick={() => setShowAddAddress(false)}>
-          <div className="modal large" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add New Address</h3>
-              <button className="modal-close" onClick={() => setShowAddAddress(false)}>
-                <FaTimes />
-              </button>
-            </div>
-            <div className="modal-content">
-              <form onSubmit={(e) => { e.preventDefault(); setShowAddAddress(false); }}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Full Name *</label>
-                    <input
-                      type="text"
-                      placeholder="Enter full name"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Mobile Number *</label>
-                    <input
-                      type="tel"
-                      placeholder="10-digit mobile number"
-                      pattern="[0-9]{10}"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Pincode *</label>
-                    <input
-                      type="text"
-                      placeholder="6-digit pincode"
-                      pattern="[0-9]{6}"
-                      maxLength="6"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>State *</label>
-                    <select required>
-                      <option value="">Select State</option>
-                      <option value="Karnataka">Karnataka</option>
-                      <option value="Maharashtra">Maharashtra</option>
-                      <option value="Tamil Nadu">Tamil Nadu</option>
-                      <option value="Delhi">Delhi</option>
-                      <option value="Uttar Pradesh">Uttar Pradesh</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label>Address (House No, Building, Street, Area) *</label>
-                  <textarea
-                    placeholder="Enter complete address"
-                    rows="3"
-                    required
-                  ></textarea>
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>City/District/Town *</label>
-                    <input
-                      type="text"
-                      placeholder="Enter city"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Landmark (Optional)</label>
-                    <input
-                      type="text"
-                      placeholder="E.g. near Apollo Hospital"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label>Address Type</label>
-                  <div className="address-type-options">
-                    <label className="radio-option">
-                      <input type="radio" name="addressType" value="Home" defaultChecked />
-                      Home
-                    </label>
-                    <label className="radio-option">
-                      <input type="radio" name="addressType" value="Work" />
-                      Work
-                    </label>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="checkbox-option">
-                    <input type="checkbox" />
-                    Make this my default address
-                  </label>
-                </div>
-                <div className="modal-actions">
-                  <button type="button" className="cancel-btn" onClick={() => setShowAddAddress(false)}>
-                    Cancel
-                  </button>
-                  <button type="submit" className="save-btn">
-                    Add Address
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Gift Card Modal */}
-      {showAddGiftCard && (
-        <div className="modal-overlay" onClick={() => setShowAddGiftCard(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add Gift Card</h3>
-              <button className="modal-close" onClick={() => setShowAddGiftCard(false)}>
-                <FaTimes />
-              </button>
-            </div>
-            <div className="modal-content">
-              <form onSubmit={(e) => { e.preventDefault(); setShowAddGiftCard(false); }}>
-                <div className="form-group">
-                  <label>Gift Card Number *</label>
-                  <input
-                    type="text"
-                    placeholder="Enter 16-digit gift card number"
-                    pattern="[0-9]{16}"
-                    maxLength="16"
-                    required
-                  />
-                  <small>Enter your 16-digit gift card number</small>
-                </div>
-                <div className="form-group">
-                  <label>PIN *</label>
-                  <input
-                    type="password"
-                    placeholder="Enter 4-digit PIN"
-                    pattern="[0-9]{4}"
-                    maxLength="4"
-                    required
-                  />
-                  <small>Enter the 4-digit PIN from the gift card</small>
-                </div>
-                <div className="modal-actions">
-                  <button type="button" className="cancel-btn" onClick={() => setShowAddGiftCard(false)}>
-                    Cancel
-                  </button>
-                  <button type="submit" className="save-btn">
-                    Add Gift Card
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Card Modal */}
-      {showAddCard && (
-        <div className="modal-overlay" onClick={() => setShowAddCard(false)}>
-          <div className="modal large" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add New Card</h3>
-              <button className="modal-close" onClick={() => setShowAddCard(false)}>
-                <FaTimes />
-              </button>
-            </div>
-            <div className="modal-content">
-              <form onSubmit={(e) => { e.preventDefault(); setShowAddCard(false); }}>
-                <div className="form-group">
+            <div className="payment-modal-content">
+              <form onSubmit={(e) => { e.preventDefault(); setShowAddPaymentCard(false); }}>
+                <div className="form-input-group">
                   <label>Card Number *</label>
-                  <input
-                    type="text"
-                    placeholder="1234 5678 9012 3456"
-                    pattern="[0-9\s]{19}"
-                    maxLength="19"
-                    required
-                  />
-                  <small>Enter your 16-digit card number</small>
+                  <input type="text" placeholder="1234 5678 9012 3456" maxLength="19" required />
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Expiry Month *</label>
-                    <select required>
-                      <option value="">Month</option>
-                      <option value="01">01 - January</option>
-                      <option value="02">02 - February</option>
-                      <option value="03">03 - March</option>
-                      <option value="04">04 - April</option>
-                      <option value="05">05 - May</option>
-                      <option value="06">06 - June</option>
-                      <option value="07">07 - July</option>
-                      <option value="08">08 - August</option>
-                      <option value="09">09 - September</option>
-                      <option value="10">10 - October</option>
-                      <option value="11">11 - November</option>
-                      <option value="12">12 - December</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label>Expiry Year *</label>
-                    <select required>
-                      <option value="">Year</option>
-                      <option value="24">2024</option>
-                      <option value="25">2025</option>
-                      <option value="26">2026</option>
-                      <option value="27">2027</option>
-                      <option value="28">2028</option>
-                      <option value="29">2029</option>
-                      <option value="30">2030</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label>CVV *</label>
-                  <input
-                    type="password"
-                    placeholder="123"
-                    pattern="[0-9]{3,4}"
-                    maxLength="4"
-                    required
-                  />
-                  <small>3 or 4 digit number on the back of your card</small>
-                </div>
-                <div className="form-group">
+                <div className="form-input-group">
                   <label>Cardholder Name *</label>
-                  <input
-                    type="text"
-                    placeholder="Name as on card"
-                    required
-                  />
+                  <input type="text" placeholder="Name as on card" required />
                 </div>
-                <div className="form-group">
-                  <label className="checkbox-option">
+                <div className="form-row-container">
+                  <div className="form-input-group">
+                    <label>Expiry Date *</label>
+                    <input type="text" placeholder="MM/YY" maxLength="5" required />
+                  </div>
+                  <div className="form-input-group">
+                    <label>CVV *</label>
+                    <input type="text" placeholder="123" maxLength="4" required />
+                  </div>
+                </div>
+                <div className="form-input-group">
+                  <label className="checkbox-input-label">
                     <input type="checkbox" />
-                    Save this card for future payments
+                    Set as default payment method
                   </label>
                 </div>
-                <div className="modal-actions">
-                  <button type="button" className="cancel-btn" onClick={() => setShowAddCard(false)}>
+                <div className="modal-action-buttons">
+                  <button type="button" className="cancel-modal-button" onClick={() => setShowAddPaymentCard(false)}>
                     Cancel
                   </button>
-                  <button type="submit" className="save-btn">
+                  <button type="submit" className="save-modal-button">
                     Add Card
                   </button>
                 </div>
@@ -1102,28 +768,22 @@ const Profile = () => {
       )}
 
       {/* Add UPI Modal */}
-      {showAddUPI && (
-        <div className="modal-overlay" onClick={() => setShowAddUPI(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add UPI ID</h3>
-              <button className="modal-close" onClick={() => setShowAddUPI(false)}>
+      {showAddUPIMethod && (
+        <div className="modal-overlay-background" onClick={() => setShowAddUPIMethod(false)}>
+          <div className="payment-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="payment-modal-header">
+              <h3>Add UPI Method</h3>
+              <button className="modal-close-button" onClick={() => setShowAddUPIMethod(false)}>
                 <FaTimes />
               </button>
             </div>
-            <div className="modal-content">
-              <form onSubmit={(e) => { e.preventDefault(); setShowAddUPI(false); }}>
-                <div className="form-group">
+            <div className="payment-modal-content">
+              <form onSubmit={(e) => { e.preventDefault(); setShowAddUPIMethod(false); }}>
+                <div className="form-input-group">
                   <label>UPI ID *</label>
-                  <input
-                    type="text"
-                    placeholder="username@paytm"
-                    pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+"
-                    required
-                  />
-                  <small>Enter your UPI ID (e.g. username@paytm, user@phonepe)</small>
+                  <input type="text" placeholder="username@paytm" required />
                 </div>
-                <div className="form-group">
+                <div className="form-input-group">
                   <label>UPI Provider</label>
                   <select>
                     <option value="">Select Provider</option>
@@ -1132,24 +792,164 @@ const Profile = () => {
                     <option value="Google Pay">Google Pay</option>
                     <option value="BHIM">BHIM</option>
                     <option value="Amazon Pay">Amazon Pay</option>
-                    <option value="Other">Other</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="checkbox-option">
+                <div className="form-input-group">
+                  <label className="checkbox-input-label">
                     <input type="checkbox" defaultChecked />
                     Verify this UPI ID
                   </label>
                 </div>
-                <div className="modal-actions">
-                  <button type="button" className="cancel-btn" onClick={() => setShowAddUPI(false)}>
+                <div className="modal-action-buttons">
+                  <button type="button" className="cancel-modal-button" onClick={() => setShowAddUPIMethod(false)}>
                     Cancel
                   </button>
-                  <button type="submit" className="save-btn">
-                    Add UPI ID
+                  <button type="submit" className="save-modal-button">
+                    Add UPI
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Wallet Modal */}
+      {showAddWalletMethod && (
+        <div className="modal-overlay-background" onClick={() => setShowAddWalletMethod(false)}>
+          <div className="payment-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="payment-modal-header">
+              <h3>Link Digital Wallet</h3>
+              <button className="modal-close-button" onClick={() => setShowAddWalletMethod(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="payment-modal-content">
+              <form onSubmit={(e) => { e.preventDefault(); setShowAddWalletMethod(false); }}>
+                <div className="form-input-group">
+                  <label>Wallet Provider *</label>
+                  <select required>
+                    <option value="">Select Wallet</option>
+                    <option value="Paytm">Paytm Wallet</option>
+                    <option value="PhonePe">PhonePe Wallet</option>
+                    <option value="Amazon Pay">Amazon Pay</option>
+                    <option value="Mobikwik">Mobikwik</option>
+                    <option value="Freecharge">Freecharge</option>
+                  </select>
+                </div>
+                <div className="form-input-group">
+                  <label>Mobile Number *</label>
+                  <input type="tel" placeholder="Enter mobile number" required />
+                </div>
+                <div className="modal-action-buttons">
+                  <button type="button" className="cancel-modal-button" onClick={() => setShowAddWalletMethod(false)}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="save-modal-button">
+                    Link Wallet
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Address Modal */}
+      {showAddUserAddress && (
+        <div className="modal-overlay-background" onClick={() => setShowAddUserAddress(false)}>
+          <div className="address-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="address-modal-header">
+              <h3>Add New Address</h3>
+              <button className="modal-close-button" onClick={() => setShowAddUserAddress(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="address-modal-content">
+              <form onSubmit={(e) => { e.preventDefault(); setShowAddUserAddress(false); }}>
+                <div className="form-input-group">
+                  <label>Address Type *</label>
+                  <select required>
+                    <option value="">Select Type</option>
+                    <option value="Home">Home</option>
+                    <option value="Office">Office</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div className="form-row-container">
+                  <div className="form-input-group">
+                    <label>Full Name *</label>
+                    <input type="text" placeholder="Enter full name" required />
+                  </div>
+                  <div className="form-input-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" placeholder="Enter phone number" required />
+                  </div>
+                </div>
+                <div className="form-input-group">
+                  <label>Address Line 1 *</label>
+                  <input type="text" placeholder="House/Flat/Office No., Building Name" required />
+                </div>
+                <div className="form-input-group">
+                  <label>Address Line 2</label>
+                  <input type="text" placeholder="Area, Street, Sector, Village" />
+                </div>
+                <div className="form-row-container">
+                  <div className="form-input-group">
+                    <label>City *</label>
+                    <input type="text" placeholder="Enter city" required />
+                  </div>
+                  <div className="form-input-group">
+                    <label>State *</label>
+                    <input type="text" placeholder="Enter state" required />
+                  </div>
+                  <div className="form-input-group">
+                    <label>PIN Code *</label>
+                    <input type="text" placeholder="Enter PIN code" maxLength="6" required />
+                  </div>
+                </div>
+                <div className="form-input-group">
+                  <label className="checkbox-input-label">
+                    <input type="checkbox" />
+                    Set as default address
+                  </label>
+                </div>
+                <div className="modal-action-buttons">
+                  <button type="button" className="cancel-modal-button" onClick={() => setShowAddUserAddress(false)}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="save-modal-button">
+                    Save Address
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* UPI QR Code Modal */}
+      {displayUPIQRCode && selectedUPIForQR && (
+        <div className="modal-overlay-background" onClick={() => setDisplayUPIQRCode(false)}>
+          <div className="qr-code-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="qr-modal-header">
+              <h3>UPI QR Code</h3>
+              <button className="modal-close-button" onClick={() => setDisplayUPIQRCode(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="qr-modal-content">
+              <div className="qr-code-display">
+                <div className="qr-code-placeholder">
+                  <FaQrcode size={120} />
+                  <p>QR Code for {selectedUPIForQR.upiAddress}</p>
+                </div>
+              </div>
+              <div className="qr-code-info">
+                <p><strong>UPI ID:</strong> {selectedUPIForQR.upiAddress}</p>
+                <p><strong>Provider:</strong> {selectedUPIForQR.upiProvider}</p>
+                <p className="qr-code-instruction">Scan this QR code to make payments</p>
+              </div>
             </div>
           </div>
         </div>
@@ -1158,4 +958,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default UserProfileDashboard;

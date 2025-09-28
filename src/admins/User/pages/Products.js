@@ -129,7 +129,6 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
           <select
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
-            className="sort-select"
           >
             <option value="Sort by Popularity">Sort by Popularity</option>
             <option value="Name">Name</option>
@@ -141,7 +140,6 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
           <select
             value={priceRange}
             onChange={(e) => setPriceRange(e.target.value)}
-            className="price-filter"
           >
             <option value="All Prices">All Prices</option>
             <option value="0-100">Under ₹100</option>

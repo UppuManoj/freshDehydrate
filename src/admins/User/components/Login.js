@@ -99,8 +99,8 @@ const Login = ({ onClose }) => {
             <input type="tel" placeholder="Phone Number" required />
             <input type="email" placeholder="Email ID" required />
             <input type="text" placeholder="Address" required />
-            <input type="text" placeholder="State" required />
             <input type="text" placeholder="City" required />
+            <input type="text" placeholder="State" required />           
             <input type="text" placeholder="Pincode" required />
             <div className="password-input-container">
               <input 
