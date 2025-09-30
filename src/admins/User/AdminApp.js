@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { useAuth } from '../../contexts/AuthContext';
 import { ProductProvider } from '../../contexts/ProductContext';
 import { OrderProvider } from '../../contexts/OrderContext';
+import { ProfileProvider } from '../../contexts/ProfileContext';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Home from './pages/Home';
@@ -15,6 +16,8 @@ import Cart from './pages/Cart';
 import Payments from './pages/Payments';
 import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';
+import AddressSelection from './pages/AddressSelection';
+import OrderSuccess from './pages/OrderSuccess';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -28,6 +31,10 @@ function AppContent() {
 
   const addToCart = (product) => {
     setCart(prevCart => [...prevCart, product]);
+  };
+
+  const clearCart = () => {
+    setCart([]);
   };
 
   const toggleFavorite = (product) => {
@@ -62,7 +69,9 @@ function AppContent() {
           <Route path="/products/:id" element={<ProductDetail onAddToCart={addToCart} />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart cart={cart} setCart={setCart} isLoggedIn={!!currentUser} onLoginClick={() => setShowLogin(true)} />} />
-          <Route path="/payments" element={<Payments />} />
+          <Route path="/address-selection" element={<AddressSelection />} />
+          <Route path="/payments" element={<Payments clearCart={clearCart} />} />
+          <Route path="/order-success" element={<OrderSuccess clearCart={clearCart} />} />
           <Route path="/favorites" element={<Favorites favorites={favorites} onToggleFavorite={toggleFavorite} onAddToCart={addToCart} />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
@@ -76,10 +85,12 @@ function AdminApp() {
   return (
     <ProductProvider>
       <OrderProvider>
-        <Router>
-          <ScrollToTop />
-          <AppContent />
-        </Router>
+        <ProfileProvider>
+          <Router>
+            <ScrollToTop />
+            <AppContent />
+          </Router>
+        </ProfileProvider>
       </OrderProvider>
     </ProductProvider>
   );

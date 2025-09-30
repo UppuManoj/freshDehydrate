@@ -2,19 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useOrders } from '../../../contexts/OrderContext';
-import { FaCreditCard, FaUniversity, FaMobile, FaShieldAlt, FaLock, FaCheckCircle, FaTimes, FaArrowLeft, FaRupeeSign } from 'react-icons/fa';
+import { useProfile } from '../../../contexts/ProfileContext';
+import { FaCreditCard, FaUniversity, FaMobile, FaShieldAlt, FaLock, FaArrowLeft, FaWallet, FaPlus } from 'react-icons/fa';
 import './Payments.css';
 
-const Payments = () => {
+const Payments = ({ clearCart }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { currentUser } = useAuth();
   const { confirmOrder } = useOrders();
+  const { savedPaymentCards, savedUPIMethods, savedWalletMethods } = useProfile();
   
   const [orderData] = useState(location.state || {});
   const [paymentMethod, setPaymentMethod] = useState('card');
+  const [selectedPaymentId, setSelectedPaymentId] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showAddNewPayment, setShowAddNewPayment] = useState(false);
   const [formData, setFormData] = useState({
     // Card details
     cardNumber: '',
@@ -40,7 +43,22 @@ const Payments = () => {
     if (!orderData.items || orderData.items.length === 0) {
       navigate('/cart');
     }
-  }, [orderData, navigate]);
+    
+    // Set default payment method and selected payment
+    if (savedPaymentCards.length > 0) {
+      const defaultCard = savedPaymentCards.find(card => card.isDefault) || savedPaymentCards[0];
+      setPaymentMethod('card');
+      setSelectedPaymentId(defaultCard.cardId);
+    } else if (savedUPIMethods.length > 0) {
+      const defaultUPI = savedUPIMethods.find(upi => upi.isDefault) || savedUPIMethods[0];
+      setPaymentMethod('upi');
+      setSelectedPaymentId(defaultUPI.upiId);
+    } else if (savedWalletMethods.length > 0) {
+      const defaultWallet = (savedWalletMethods.find(wallet => wallet.isLinked) || savedWalletMethods[0]);
+      setPaymentMethod('wallet');
+      setSelectedPaymentId(defaultWallet.walletId);
+    }
+  }, [orderData, navigate, savedPaymentCards, savedUPIMethods, savedWalletMethods]);
 
   const handleInputChange = (field, value) => {
     if (field.includes('.')) {
@@ -65,7 +83,7 @@ const Payments = () => {
     const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
     // Add spaces every 4 digits
     const matches = v.match(/\d{4,16}/g);
-    const match = matches && matches[0] || '';
+    const match = (matches && matches[0]) || '';
     const parts = [];
     for (let i = 0, len = match.length; i < len; i += 4) {
       parts.push(match.substring(i, i + 4));
@@ -86,6 +104,7 @@ const Payments = () => {
   };
 
   const validateForm = () => {
+    if (showAddNewPayment) {
     if (paymentMethod === 'card') {
       return formData.cardNumber.replace(/\s/g, '').length === 16 &&
              formData.expiryDate.length === 5 &&
@@ -97,6 +116,10 @@ const Payments = () => {
       return formData.bankName !== '';
     }
     return false;
+    } else {
+      // Using saved payment method
+      return selectedPaymentId !== null;
+    }
   };
 
   const handlePayment = async () => {
@@ -111,14 +134,11 @@ const Payments = () => {
       // Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 3000));
 
-      // Confirm the order
-      const orderDetails = {
-        customerEmail: currentUser?.email || 'user@example.com',
-        customerName: currentUser?.name || 'Guest User',
-        shippingAddress: orderData.shippingAddress || 'Default Address',
-        billingAddress: formData.billingAddress,
-        paymentMethod: paymentMethod,
-        paymentDetails: {
+      // Get payment details based on selected method
+      let paymentDetails = {};
+      
+      if (showAddNewPayment) {
+        paymentDetails = {
           ...(paymentMethod === 'card' && {
             cardNumber: '**** **** **** ' + formData.cardNumber.slice(-4),
             cardHolderName: formData.cardHolderName
@@ -129,17 +149,57 @@ const Payments = () => {
           ...(paymentMethod === 'netbanking' && {
             bankName: formData.bankName
           })
+        };
+      } else {
+        // Using saved payment method
+        if (paymentMethod === 'card') {
+          const selectedCard = savedPaymentCards.find(card => card.cardId === selectedPaymentId);
+          paymentDetails = {
+            cardNumber: selectedCard?.cardNumber,
+            cardHolderName: selectedCard?.cardHolderName,
+            cardType: selectedCard?.cardType
+          };
+        } else if (paymentMethod === 'upi') {
+          const selectedUPI = savedUPIMethods.find(upi => upi.upiId === selectedPaymentId);
+          paymentDetails = {
+            upiId: selectedUPI?.upiAddress,
+            upiProvider: selectedUPI?.upiProvider
+          };
+        } else if (paymentMethod === 'wallet') {
+          const selectedWallet = savedWalletMethods.find(wallet => wallet.walletId === selectedPaymentId);
+          paymentDetails = {
+            walletName: selectedWallet?.walletName,
+            walletProvider: selectedWallet?.walletProvider,
+            walletBalance: selectedWallet?.walletBalance
+          };
         }
+      }
+
+      // Confirm the order
+      const orderDetails = {
+        customerEmail: currentUser?.email || 'user@example.com',
+        customerName: currentUser?.name || 'Guest User',
+        shippingAddress: orderData.shippingAddress,
+        billingAddress: formData.billingAddress,
+        paymentMethod: paymentMethod,
+        paymentDetails: paymentDetails
       };
 
-      await confirmOrder(orderData.items, orderDetails);
+      const newOrder = await confirmOrder(orderData.items, orderDetails);
       
-      setShowSuccess(true);
-      
-      // Redirect to home after 3 seconds
-      setTimeout(() => {
-        navigate('/', { replace: true });
-      }, 3000);
+      // Navigate to order success page with complete order data
+      const completeOrderData = {
+        ...orderData,
+        orderId: newOrder.id,
+        orderDate: newOrder.createdAt,
+        paymentMethod: paymentMethod,
+        paymentDetails: paymentDetails
+      };
+
+      navigate('/order-success', { 
+        state: completeOrderData,
+        replace: true 
+      });
 
     } catch (error) {
       console.error('Payment error:', error);
@@ -149,25 +209,12 @@ const Payments = () => {
     }
   };
 
-  if (showSuccess) {
-    return (
-      <div className="payment-success">
-        <div className="success-container">
-          <FaCheckCircle className="success-icon" />
-          <h2>Payment Successful!</h2>
-          <p>Your order has been confirmed and will be processed shortly.</p>
-          <p>Order Total: ₹{orderData.total?.toFixed(2)}</p>
-          <p>Redirecting to home page...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="payments-page">
       <div className="payments-header">
-        <button className="back-btn" onClick={() => navigate('/cart')}>
-          <FaArrowLeft /> Back to Cart
+        <button className="back-btn" onClick={() => navigate('/address-selection', { state: orderData })}>
+          <FaArrowLeft /> Back to Address
         </button>
         <h2><FaLock /> Secure Payment</h2>
         <p>Complete your purchase securely</p>
@@ -215,41 +262,185 @@ const Payments = () => {
           {/* Payment Methods */}
           <div className="payment-methods">
             <h3>Choose Payment Method</h3>
-            <div className="method-options">
-              <label className={`method-option ${paymentMethod === 'card' ? 'selected' : ''}`}>
+            
+            {/* Saved Cards */}
+            {savedPaymentCards.length > 0 && (
+              <div className="saved-payment-section">
+                <div className="payment-section-header">
+                  <h4><FaCreditCard /> Saved Cards</h4>
+                  <button 
+                    className="add-new-btn"
+                    onClick={() => {
+                      setPaymentMethod('card');
+                      setShowAddNewPayment(true);
+                      setSelectedPaymentId(null);
+                    }}
+                  >
+                    <FaPlus /> Add New
+                  </button>
+                </div>
+                <div className="saved-payment-list">
+                  {savedPaymentCards.map(card => (
+                    <div 
+                      key={card.cardId}
+                      className={`saved-payment-item ${paymentMethod === 'card' && selectedPaymentId === card.cardId ? 'selected' : ''}`}
+                      onClick={() => {
+                        setPaymentMethod('card');
+                        setSelectedPaymentId(card.cardId);
+                        setShowAddNewPayment(false);
+                      }}
+                    >
+                      <div className="payment-item-info">
+                        <FaCreditCard className="payment-icon" />
+                        <div className="payment-details">
+                          <span className="payment-number">{card.cardNumber}</span>
+                          <span className="payment-name">{card.cardHolderName}</span>
+                          <span className="payment-type">{card.cardType} • Expires {card.expiryDate}</span>
+                        </div>
+                      </div>
+                      {card.isDefault && <span className="default-badge">Default</span>}
+                      <input 
+                        type="radio" 
+                        name="paymentMethod" 
+                        checked={paymentMethod === 'card' && selectedPaymentId === card.cardId}
+                        onChange={() => {}}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Saved UPI Methods */}
+            {savedUPIMethods.length > 0 && (
+              <div className="saved-payment-section">
+                <div className="payment-section-header">
+                  <h4><FaMobile /> UPI Methods</h4>
+                  <button 
+                    className="add-new-btn"
+                    onClick={() => {
+                      setPaymentMethod('upi');
+                      setShowAddNewPayment(true);
+                      setSelectedPaymentId(null);
+                    }}
+                  >
+                    <FaPlus /> Add New
+                  </button>
+                </div>
+                <div className="saved-payment-list">
+                  {savedUPIMethods.map(upi => (
+                    <div 
+                      key={upi.upiId}
+                      className={`saved-payment-item ${paymentMethod === 'upi' && selectedPaymentId === upi.upiId ? 'selected' : ''}`}
+                      onClick={() => {
+                        setPaymentMethod('upi');
+                        setSelectedPaymentId(upi.upiId);
+                        setShowAddNewPayment(false);
+                      }}
+                    >
+                      <div className="payment-item-info">
+                        <FaMobile className="payment-icon" />
+                        <div className="payment-details">
+                          <span className="payment-number">{upi.upiAddress}</span>
+                          <span className="payment-type">{upi.upiProvider}</span>
+                        </div>
+                      </div>
+                      {upi.isVerified && <span className="verified-badge">Verified</span>}
+                      {upi.isDefault && <span className="default-badge">Default</span>}
                 <input
                   type="radio"
-                  value="card"
-                  checked={paymentMethod === 'card'}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-                <FaCreditCard />
-                <span>Credit/Debit Card</span>
-              </label>
-              <label className={`method-option ${paymentMethod === 'upi' ? 'selected' : ''}`}>
+                        name="paymentMethod" 
+                        checked={paymentMethod === 'upi' && selectedPaymentId === upi.upiId}
+                        onChange={() => {}}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Saved Wallets */}
+            {savedWalletMethods.length > 0 && (
+              <div className="saved-payment-section">
+                <div className="payment-section-header">
+                  <h4><FaWallet /> Digital Wallets</h4>
+                  <button 
+                    className="add-new-btn"
+                    onClick={() => {
+                      setPaymentMethod('wallet');
+                      setShowAddNewPayment(true);
+                      setSelectedPaymentId(null);
+                    }}
+                  >
+                    <FaPlus /> Add New
+                  </button>
+                </div>
+                <div className="saved-payment-list">
+                  {savedWalletMethods.map(wallet => (
+                    <div 
+                      key={wallet.walletId}
+                      className={`saved-payment-item ${paymentMethod === 'wallet' && selectedPaymentId === wallet.walletId ? 'selected' : ''}`}
+                      onClick={() => {
+                        setPaymentMethod('wallet');
+                        setSelectedPaymentId(wallet.walletId);
+                        setShowAddNewPayment(false);
+                      }}
+                    >
+                      <div className="payment-item-info">
+                        <FaWallet className="payment-icon" />
+                        <div className="payment-details">
+                          <span className="payment-number">{wallet.walletName}</span>
+                          <span className="payment-balance">{wallet.walletBalance}</span>
+                          <span className="payment-type">{wallet.walletProvider}</span>
+                        </div>
+                      </div>
+                      {wallet.isLinked && <span className="linked-badge">Linked</span>}
                 <input
                   type="radio"
-                  value="upi"
-                  checked={paymentMethod === 'upi'}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />
-                <FaMobile />
-                <span>UPI</span>
-              </label>
-              <label className={`method-option ${paymentMethod === 'netbanking' ? 'selected' : ''}`}>
+                        name="paymentMethod" 
+                        checked={paymentMethod === 'wallet' && selectedPaymentId === wallet.walletId}
+                        onChange={() => {}}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Net Banking Option */}
+            <div className="saved-payment-section">
+              <div className="payment-section-header">
+                <h4><FaUniversity /> Net Banking</h4>
+              </div>
+              <div className="saved-payment-list">
+                <div 
+                  className={`saved-payment-item ${paymentMethod === 'netbanking' ? 'selected' : ''}`}
+                  onClick={() => {
+                    setPaymentMethod('netbanking');
+                    setShowAddNewPayment(true);
+                    setSelectedPaymentId('netbanking');
+                  }}
+                >
+                  <div className="payment-item-info">
+                    <FaUniversity className="payment-icon" />
+                    <div className="payment-details">
+                      <span className="payment-number">Net Banking</span>
+                      <span className="payment-type">Pay using your bank account</span>
+                    </div>
+                  </div>
                 <input
                   type="radio"
-                  value="netbanking"
+                    name="paymentMethod" 
                   checked={paymentMethod === 'netbanking'}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
+                    onChange={() => {}}
                 />
-                <FaUniversity />
-                <span>Net Banking</span>
-              </label>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Payment Form */}
+          {/* Payment Form - Only show when adding new payment */}
+          {showAddNewPayment && (
           <div className="payment-form">
             {paymentMethod === 'card' && (
               <div className="card-form">
@@ -347,6 +538,7 @@ const Payments = () => {
               </div>
             )}
           </div>
+          )}
 
           {/* Security Notice */}
           <div className="security-notice">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useProducts } from '../../../contexts/ProductContext';
-import { FaCog, FaDatabase, FaShieldAlt, FaServer, FaUsers, FaCloudUploadAlt, FaExclamationTriangle, FaCheckCircle, FaKey, FaEnvelope, FaCreditCard } from 'react-icons/fa';
+import { FaCog, FaDatabase, FaShieldAlt, FaServer, FaCloudUploadAlt, FaExclamationTriangle, FaCheckCircle, FaEnvelope, FaCreditCard } from 'react-icons/fa';
 
 const SystemSettings = () => {
   const { currentUser } = useAuth();

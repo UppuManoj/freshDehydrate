@@ -489,3 +489,143 @@
     text-align: center;
   }
 }
+
+/* Saved Payment Methods Styling */
+.saved-payment-section {
+  margin-bottom: 24px;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.payment-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.payment-section-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #212529;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-new-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.add-new-btn:hover {
+  background: #0056b3;
+}
+
+.saved-payment-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.saved-payment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f3f4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.saved-payment-item:last-child {
+  border-bottom: none;
+}
+
+.saved-payment-item:hover {
+  background: #f8f9fa;
+}
+
+.saved-payment-item.selected {
+  background: #f8f9ff;
+  border-left: 4px solid #007bff;
+}
+
+.payment-item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.payment-icon {
+  color: #007bff;
+  font-size: 18px;
+}
+
+.payment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.payment-number {
+  font-weight: 600;
+  color: #212529;
+  font-size: 14px;
+}
+
+.payment-name {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.payment-type {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.payment-balance {
+  font-size: 14px;
+  font-weight: 600;
+  color: #28a745;
+}
+
+.default-badge,
+.verified-badge,
+.linked-badge {
+  background: #28a745;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-right: 8px;
+}
+
+.verified-badge {
+  background: #17a2b8;
+}
+
+.linked-badge {
+  background: #6f42c1;
+}
+
+.saved-payment-item input[type="radio"] {
+  margin: 0;
+}

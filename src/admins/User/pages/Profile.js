@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useOrders } from '../../../contexts/OrderContext';
+import { useProfile } from '../../../contexts/ProfileContext';
 import { 
   FaUser, 
   FaShoppingCart, 
@@ -28,13 +29,31 @@ import {
   FaSearch,
   FaShoppingBag,
   FaCalendar,
-  FaRupeeSign
+  FaRupeeSign,
+  FaDownload,
+  FaCheckCircle,
+  FaClock,
+  FaTruck
 } from 'react-icons/fa';
 import './Profile.css';
 
 const UserProfileDashboard = () => {
-  const { currentUser, logout } = useAuth();
-  const { orders, orderStats } = useOrders();
+  const { logout } = useAuth();
+  const { orderStats } = useOrders();
+  const { 
+    userProfileInfo, 
+    setUserProfileInfo,
+    userAddressList, 
+    savedPaymentCards, 
+    savedUPIMethods, 
+    savedWalletMethods,
+    addAddress,
+    updateAddress,
+    removeAddress: removeAddressFromContext,
+    removePaymentCard: removePaymentCardFromContext,
+    removeUPIMethod: removeUPIMethodFromContext,
+    removeWalletMethod: removeWalletMethodFromContext
+  } = useProfile();
   const navigate = useNavigate();
   const [currentActiveTab, setCurrentActiveTab] = useState('dashboard');
   const [isEditingUserInfo, setIsEditingUserInfo] = useState(false);
@@ -42,77 +61,32 @@ const UserProfileDashboard = () => {
   const [showAddUPIMethod, setShowAddUPIMethod] = useState(false);
   const [showAddWalletMethod, setShowAddWalletMethod] = useState(false);
   const [showAddUserAddress, setShowAddUserAddress] = useState(false);
-  const [editingAddressId, setEditingAddressId] = useState(null);
-  const [displayUPIQRCode, setDisplayUPIQRCode] = useState(false);
-  const [selectedUPIForQR, setSelectedUPIForQR] = useState(null);
-  const [orderSearchQuery, setOrderSearchQuery] = useState('');
-
-  // User profile information
-  const [userProfileInfo, setUserProfileInfo] = useState({
-    firstName: 'Manoj',
-    lastName: 'Kumar',
-    emailAddress: 'smartmanoj621@gmail.com',
-    phoneNumber: '+916303060469',
-    birthDate: '15/08/1990',
-    currentAddress: 'Bangalore, Karnataka'
+  const [showEditUserAddress, setShowEditUserAddress] = useState(false);
+  const [editingAddress, setEditingAddress] = useState(null);
+  
+  // Address form state
+  const [addressForm, setAddressForm] = useState({
+    addressType: '',
+    fullName: '',
+    phoneNumber: '',
+    addressLine1: '',
+    addressLine2: '',
+    cityName: '',
+    stateName: '',
+    pinCode: '',
+    isDefault: false
   });
+  const [displayUPIQRCode, setDisplayUPIQRCode] = useState(false);
+  const [selectedUPIForQR] = useState(null);
+  const [orderSearchQuery, setOrderSearchQuery] = useState('');
+  const [showOrderDetails, setShowOrderDetails] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showTrackOrder, setShowTrackOrder] = useState(false);
+  const [trackingOrder, setTrackingOrder] = useState(null);
 
-  // Payment methods data
-  const [savedPaymentCards, setSavedPaymentCards] = useState([
-    { 
-      cardId: 1, 
-      cardNumber: '**** **** **** 1234', 
-      cardHolderName: 'Manoj Kumar', 
-      expiryDate: '12/25', 
-      cardType: 'Visa',
-      isDefault: true 
-    },
-    { 
-      cardId: 2, 
-      cardNumber: '**** **** **** 5678', 
-      cardHolderName: 'Manoj Kumar', 
-      expiryDate: '08/26', 
-      cardType: 'Mastercard',
-      isDefault: false 
-    }
-  ]);
-
-  const [savedUPIMethods, setSavedUPIMethods] = useState([
-    { 
-      upiId: 1, 
-      upiAddress: 'manoj@paytm', 
-      upiProvider: 'Paytm', 
-      isVerified: true,
-      isDefault: true 
-    },
-    { 
-      upiId: 2, 
-      upiAddress: 'manoj@phonepe', 
-      upiProvider: 'PhonePe', 
-      isVerified: true,
-      isDefault: false 
-    }
-  ]);
-
-  const [savedWalletMethods, setSavedWalletMethods] = useState([
-    { 
-      walletId: 1, 
-      walletName: 'Paytm Wallet', 
-      walletBalance: '₹1,250', 
-      walletProvider: 'Paytm',
-      isLinked: true 
-    },
-    { 
-      walletId: 2, 
-      walletName: 'PhonePe Wallet', 
-      walletBalance: '₹850', 
-      walletProvider: 'PhonePe',
-      isLinked: true 
-    }
-  ]);
 
   // Sample order data - Set to empty array [] to test zero orders state
-  const [userOrderHistory, setUserOrderHistory] = useState([
+  const [userOrderHistory] = useState([
     {
       orderId: 'ORD001',
       orderDate: '2024-01-15',
@@ -120,7 +94,28 @@ const UserProfileDashboard = () => {
       orderTotal: 1250,
       itemCount: 3,
       productName: 'Dehydrated Mango Slices',
-      deliveryDate: '2024-01-18'
+      deliveryDate: '2024-01-18',
+      deliveredDate: '2024-01-18',
+      paymentMode: 'UPI - manoj@paytm',
+      paymentStatus: 'Paid',
+      shippingAddress: userAddressList[0],
+      items: [
+        { name: 'Dehydrated Mango Slices', quantity: 2, price: 299, total: 598 },
+        { name: 'Apple Chips', quantity: 1, price: 199, total: 199 },
+        { name: 'Mixed Nuts', quantity: 1, price: 399, total: 399 }
+      ],
+      subtotal: 1196,
+      shipping: 54,
+      tax: 0,
+      discount: 0,
+      trackingInfo: [
+        { status: 'Order Placed', date: '2024-01-15', time: '10:30 AM', completed: true },
+        { status: 'Order Confirmed', date: '2024-01-15', time: '11:15 AM', completed: true },
+        { status: 'Packed', date: '2024-01-16', time: '09:00 AM', completed: true },
+        { status: 'Shipped', date: '2024-01-16', time: '02:30 PM', completed: true },
+        { status: 'Out for Delivery', date: '2024-01-18', time: '08:00 AM', completed: true },
+        { status: 'Delivered', date: '2024-01-18', time: '11:45 AM', completed: true }
+      ]
     },
     {
       orderId: 'ORD002',
@@ -129,7 +124,26 @@ const UserProfileDashboard = () => {
       orderTotal: 850,
       itemCount: 2,
       productName: 'Mixed Vegetable Chips',
-      deliveryDate: '2024-01-23'
+      deliveryDate: '2024-01-23',
+      paymentMode: 'Credit Card - **** 1234',
+      paymentStatus: 'Paid',
+      shippingAddress: userAddressList[1],
+      items: [
+        { name: 'Mixed Vegetable Chips', quantity: 2, price: 249, total: 498 },
+        { name: 'Tomato Slices', quantity: 1, price: 299, total: 299 }
+      ],
+      subtotal: 797,
+      shipping: 53,
+      tax: 0,
+      discount: 0,
+      trackingInfo: [
+        { status: 'Order Placed', date: '2024-01-20', time: '02:15 PM', completed: true },
+        { status: 'Order Confirmed', date: '2024-01-20', time: '02:45 PM', completed: true },
+        { status: 'Packed', date: '2024-01-21', time: '10:30 AM', completed: true },
+        { status: 'Shipped', date: '2024-01-21', time: '04:00 PM', completed: true },
+        { status: 'Out for Delivery', date: '2024-01-23', time: '09:00 AM', completed: false },
+        { status: 'Delivered', date: '2024-01-23', time: 'Expected by 6:00 PM', completed: false }
+      ]
     },
     {
       orderId: 'ORD003',
@@ -138,35 +152,25 @@ const UserProfileDashboard = () => {
       orderTotal: 650,
       itemCount: 1,
       productName: 'Banana Powder',
-      deliveryDate: '2024-01-28'
-    }
-  ]);
-
-  // Address data
-  const [userAddressList, setUserAddressList] = useState([
-    {
-      addressId: 1,
-      addressType: 'Home',
-      fullName: 'Manoj Kumar',
-      phoneNumber: '+916303060469',
-      addressLine1: '123 MG Road',
-      addressLine2: 'Near City Mall',
-      cityName: 'Bangalore',
-      stateName: 'Karnataka',
-      pinCode: '560001',
-      isDefault: true
-    },
-    {
-      addressId: 2,
-      addressType: 'Office',
-      fullName: 'Manoj Kumar',
-      phoneNumber: '+916303060469',
-      addressLine1: '456 Tech Park',
-      addressLine2: 'Electronic City',
-      cityName: 'Bangalore',
-      stateName: 'Karnataka',
-      pinCode: '560100',
-      isDefault: false
+      deliveryDate: '2024-01-28',
+      paymentMode: 'Paytm Wallet',
+      paymentStatus: 'Paid',
+      shippingAddress: userAddressList[0],
+      items: [
+        { name: 'Banana Powder', quantity: 1, price: 599, total: 599 }
+      ],
+      subtotal: 599,
+      shipping: 51,
+      tax: 0,
+      discount: 0,
+      trackingInfo: [
+        { status: 'Order Placed', date: '2024-01-25', time: '11:20 AM', completed: true },
+        { status: 'Order Confirmed', date: '2024-01-25', time: '11:50 AM', completed: true },
+        { status: 'Packed', date: '2024-01-26', time: 'Expected by 2:00 PM', completed: false },
+        { status: 'Shipped', date: '2024-01-26', time: 'Expected by 5:00 PM', completed: false },
+        { status: 'Out for Delivery', date: '2024-01-28', time: 'Expected by 10:00 AM', completed: false },
+        { status: 'Delivered', date: '2024-01-28', time: 'Expected by 6:00 PM', completed: false }
+      ]
     }
   ]);
 
@@ -184,19 +188,141 @@ const UserProfileDashboard = () => {
   };
 
   const removePaymentCard = (cardId) => {
-    setSavedPaymentCards(savedPaymentCards.filter(card => card.cardId !== cardId));
+    removePaymentCardFromContext(cardId);
   };
 
   const removeUPIMethod = (upiId) => {
-    setSavedUPIMethods(savedUPIMethods.filter(upi => upi.upiId !== upiId));
+    removeUPIMethodFromContext(upiId);
   };
 
   const removeWalletMethod = (walletId) => {
-    setSavedWalletMethods(savedWalletMethods.filter(wallet => wallet.walletId !== walletId));
+    removeWalletMethodFromContext(walletId);
   };
 
   const removeUserAddress = (addressId) => {
-    setUserAddressList(userAddressList.filter(address => address.addressId !== addressId));
+    removeAddressFromContext(addressId);
+  };
+
+  const handleViewOrderDetails = (order) => {
+    setSelectedOrder(order);
+    setShowOrderDetails(true);
+  };
+
+  const handleTrackOrder = (order) => {
+    setTrackingOrder(order);
+    setShowTrackOrder(true);
+  };
+
+  const generateInvoicePDF = (order) => {
+    // Create a simple invoice content
+    const invoiceContent = `
+      FRESH DEHYDRATE - INVOICE
+      
+      Order ID: ${order.orderId}
+      Order Date: ${new Date(order.orderDate).toLocaleDateString()}
+      
+      Bill To:
+      ${order.shippingAddress.fullName}
+      ${order.shippingAddress.addressLine1}
+      ${order.shippingAddress.addressLine2}
+      ${order.shippingAddress.cityName}, ${order.shippingAddress.stateName} - ${order.shippingAddress.pinCode}
+      Phone: ${order.shippingAddress.phoneNumber}
+      
+      Items:
+      ${order.items.map(item => 
+        `${item.name} - Qty: ${item.quantity} - ₹${item.price} each - Total: ₹${item.total}`
+      ).join('\n')}
+      
+      Subtotal: ₹${order.subtotal}
+      Shipping: ₹${order.shipping}
+      Tax: ₹${order.tax}
+      Discount: ₹${order.discount}
+      
+      Total Amount: ₹${order.orderTotal}
+      
+      Payment Mode: ${order.paymentMode}
+      Payment Status: ${order.paymentStatus}
+      
+      Thank you for shopping with Fresh Dehydrate!
+    `;
+
+    // Create and download the invoice as a text file (in a real app, you'd use a PDF library)
+    const blob = new Blob([invoiceContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Invoice_${order.orderId}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Address management functions
+  const handleEditAddress = (address) => {
+    setEditingAddress(address);
+    setAddressForm({
+      addressType: address.addressType,
+      fullName: address.fullName,
+      phoneNumber: address.phoneNumber,
+      addressLine1: address.addressLine1,
+      addressLine2: address.addressLine2,
+      cityName: address.cityName,
+      stateName: address.stateName,
+      pinCode: address.pinCode,
+      isDefault: address.isDefault
+    });
+    setShowEditUserAddress(true);
+  };
+
+  const handleAddNewAddress = () => {
+    setEditingAddress(null);
+    setAddressForm({
+      addressType: '',
+      fullName: '',
+      phoneNumber: '',
+      addressLine1: '',
+      addressLine2: '',
+      cityName: '',
+      stateName: '',
+      pinCode: '',
+      isDefault: false
+    });
+    setShowAddUserAddress(true);
+  };
+
+  const handleSaveAddress = (e) => {
+    e.preventDefault();
+    
+    if (editingAddress) {
+      // Update existing address
+      updateAddress(editingAddress.addressId, addressForm);
+      setShowEditUserAddress(false);
+    } else {
+      // Add new address
+      addAddress(addressForm);
+      setShowAddUserAddress(false);
+    }
+    
+    // Reset form
+    setAddressForm({
+      addressType: '',
+      fullName: '',
+      phoneNumber: '',
+      addressLine1: '',
+      addressLine2: '',
+      cityName: '',
+      stateName: '',
+      pinCode: '',
+      isDefault: false 
+    });
+  };
+
+  const handleAddressFormChange = (field, value) => {
+    setAddressForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
  
@@ -206,7 +332,7 @@ const UserProfileDashboard = () => {
       tabId: 'dashboard', 
       tabIcon: <FaUser />, 
       tabTitle: 'Profile Dashboard', 
-      tabSubtitle: 'View and edit your personal information'
+      tabSubtitle: 'View & edit your personal information'
     },
     { 
       tabId: 'orderHistory', 
@@ -562,8 +688,12 @@ const UserProfileDashboard = () => {
                     Expected delivery: {new Date(order.deliveryDate).toLocaleDateString()}
                   </span>
                   <div className="order-actions">
-                    <button className="track-order-button">Track Order</button>
-                    <button className="view-details-button">View Details</button>
+                    <button className="track-order-button" onClick={() => handleTrackOrder(order)}>
+                      Track Order
+                    </button>
+                    <button className="view-details-button" onClick={() => handleViewOrderDetails(order)}>
+                      View Details
+                    </button>
                   </div>
                 </div>
               </div>
@@ -578,7 +708,7 @@ const UserProfileDashboard = () => {
     <div className="address-book-section">
       <div className="address-section-header">
         <h2>Address Book</h2>
-        <button className="add-address-button" onClick={() => setShowAddUserAddress(true)}>
+        <button className="add-address-button" onClick={handleAddNewAddress}>
           <FaPlus /> Add New Address
         </button>
       </div>
@@ -604,7 +734,7 @@ const UserProfileDashboard = () => {
               </div>
             </div>
             <div className="address-actions">
-              <button className="edit-address-button" onClick={() => setEditingAddressId(address.addressId)}>
+              <button className="edit-address-button" onClick={() => handleEditAddress(address)}>
                 <FaEdit />
               </button>
               <button className="remove-address-button" onClick={() => removeUserAddress(address.addressId)}>
@@ -665,7 +795,7 @@ const UserProfileDashboard = () => {
             </div>
             <div className="user-greeting-text">
               <span className="user-greeting">Hello,</span>
-              <span className="user-display-name">{userProfileInfo.firstName}</span>
+              <span className="user-display-name">{userProfileInfo.firstName} {userProfileInfo.lastName}</span>
             </div>
             <button className="close-profile-button" onClick={handleCloseProfile}>
               <FaTimes />
@@ -866,10 +996,14 @@ const UserProfileDashboard = () => {
               </button>
             </div>
             <div className="address-modal-content">
-              <form onSubmit={(e) => { e.preventDefault(); setShowAddUserAddress(false); }}>
+              <form onSubmit={handleSaveAddress}>
                 <div className="form-input-group">
                   <label>Address Type *</label>
-                  <select required>
+                  <select 
+                    value={addressForm.addressType}
+                    onChange={(e) => handleAddressFormChange('addressType', e.target.value)}
+                    required
+                  >
                     <option value="">Select Type</option>
                     <option value="Home">Home</option>
                     <option value="Office">Office</option>
@@ -879,38 +1013,84 @@ const UserProfileDashboard = () => {
                 <div className="form-row-container">
                   <div className="form-input-group">
                     <label>Full Name *</label>
-                    <input type="text" placeholder="Enter full name" required />
+                    <input 
+                      type="text" 
+                      placeholder="Enter full name" 
+                      value={addressForm.fullName}
+                      onChange={(e) => handleAddressFormChange('fullName', e.target.value)}
+                      required 
+                    />
                   </div>
                   <div className="form-input-group">
                     <label>Phone Number *</label>
-                    <input type="tel" placeholder="Enter phone number" required />
+                    <input 
+                      type="tel" 
+                      placeholder="Enter phone number" 
+                      value={addressForm.phoneNumber}
+                      onChange={(e) => handleAddressFormChange('phoneNumber', e.target.value)}
+                      required 
+                    />
                   </div>
                 </div>
                 <div className="form-input-group">
                   <label>Address Line 1 *</label>
-                  <input type="text" placeholder="House/Flat/Office No., Building Name" required />
+                  <input 
+                    type="text" 
+                    placeholder="House/Flat/Office No., Building Name" 
+                    value={addressForm.addressLine1}
+                    onChange={(e) => handleAddressFormChange('addressLine1', e.target.value)}
+                    required 
+                  />
                 </div>
                 <div className="form-input-group">
                   <label>Address Line 2</label>
-                  <input type="text" placeholder="Area, Street, Sector, Village" />
+                  <input 
+                    type="text" 
+                    placeholder="Area, Street, Sector, Village" 
+                    value={addressForm.addressLine2}
+                    onChange={(e) => handleAddressFormChange('addressLine2', e.target.value)}
+                  />
                 </div>
                 <div className="form-row-container">
                   <div className="form-input-group">
                     <label>City *</label>
-                    <input type="text" placeholder="Enter city" required />
+                    <input 
+                      type="text" 
+                      placeholder="Enter city" 
+                      value={addressForm.cityName}
+                      onChange={(e) => handleAddressFormChange('cityName', e.target.value)}
+                      required 
+                    />
                   </div>
                   <div className="form-input-group">
                     <label>State *</label>
-                    <input type="text" placeholder="Enter state" required />
+                    <input 
+                      type="text" 
+                      placeholder="Enter state" 
+                      value={addressForm.stateName}
+                      onChange={(e) => handleAddressFormChange('stateName', e.target.value)}
+                      required 
+                    />
                   </div>
                   <div className="form-input-group">
                     <label>PIN Code *</label>
-                    <input type="text" placeholder="Enter PIN code" maxLength="6" required />
+                    <input 
+                      type="text" 
+                      placeholder="Enter PIN code" 
+                      maxLength="6" 
+                      value={addressForm.pinCode}
+                      onChange={(e) => handleAddressFormChange('pinCode', e.target.value)}
+                      required 
+                    />
                   </div>
                 </div>
                 <div className="form-input-group">
                   <label className="checkbox-input-label">
-                    <input type="checkbox" />
+                    <input 
+                      type="checkbox" 
+                      checked={addressForm.isDefault}
+                      onChange={(e) => handleAddressFormChange('isDefault', e.target.checked)}
+                    />
                     Set as default address
                   </label>
                 </div>
@@ -920,6 +1100,129 @@ const UserProfileDashboard = () => {
                   </button>
                   <button type="submit" className="save-modal-button">
                     Save Address
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Address Modal */}
+      {showEditUserAddress && editingAddress && (
+        <div className="modal-overlay-background" onClick={() => setShowEditUserAddress(false)}>
+          <div className="address-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="address-modal-header">
+              <h3>Edit Address</h3>
+              <button className="modal-close-button" onClick={() => setShowEditUserAddress(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="address-modal-content">
+              <form onSubmit={handleSaveAddress}>
+                <div className="form-input-group">
+                  <label>Address Type *</label>
+                  <select 
+                    value={addressForm.addressType}
+                    onChange={(e) => handleAddressFormChange('addressType', e.target.value)}
+                    required
+                  >
+                    <option value="">Select Type</option>
+                    <option value="Home">Home</option>
+                    <option value="Office">Office</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div className="form-row-container">
+                  <div className="form-input-group">
+                    <label>Full Name *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter full name" 
+                      value={addressForm.fullName}
+                      onChange={(e) => handleAddressFormChange('fullName', e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <div className="form-input-group">
+                    <label>Phone Number *</label>
+                    <input 
+                      type="tel" 
+                      placeholder="Enter phone number" 
+                      value={addressForm.phoneNumber}
+                      onChange={(e) => handleAddressFormChange('phoneNumber', e.target.value)}
+                      required 
+                    />
+                  </div>
+                </div>
+                <div className="form-input-group">
+                  <label>Address Line 1 *</label>
+                  <input 
+                    type="text" 
+                    placeholder="House/Flat/Office No., Building Name" 
+                    value={addressForm.addressLine1}
+                    onChange={(e) => handleAddressFormChange('addressLine1', e.target.value)}
+                    required 
+                  />
+                </div>
+                <div className="form-input-group">
+                  <label>Address Line 2</label>
+                  <input 
+                    type="text" 
+                    placeholder="Area, Street, Sector, Village" 
+                    value={addressForm.addressLine2}
+                    onChange={(e) => handleAddressFormChange('addressLine2', e.target.value)}
+                  />
+                </div>
+                <div className="form-row-container">
+                  <div className="form-input-group">
+                    <label>City *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter city" 
+                      value={addressForm.cityName}
+                      onChange={(e) => handleAddressFormChange('cityName', e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <div className="form-input-group">
+                    <label>State *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter state" 
+                      value={addressForm.stateName}
+                      onChange={(e) => handleAddressFormChange('stateName', e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <div className="form-input-group">
+                    <label>PIN Code *</label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter PIN code" 
+                      maxLength="6" 
+                      value={addressForm.pinCode}
+                      onChange={(e) => handleAddressFormChange('pinCode', e.target.value)}
+                      required 
+                    />
+                  </div>
+                </div>
+                <div className="form-input-group">
+                  <label className="checkbox-input-label">
+                    <input 
+                      type="checkbox" 
+                      checked={addressForm.isDefault}
+                      onChange={(e) => handleAddressFormChange('isDefault', e.target.checked)}
+                    />
+                    Set as default address
+                  </label>
+                </div>
+                <div className="modal-action-buttons">
+                  <button type="button" className="cancel-modal-button" onClick={() => setShowEditUserAddress(false)}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="save-modal-button">
+                    Update Address
                   </button>
                 </div>
               </form>
@@ -949,6 +1252,202 @@ const UserProfileDashboard = () => {
                 <p><strong>UPI ID:</strong> {selectedUPIForQR.upiAddress}</p>
                 <p><strong>Provider:</strong> {selectedUPIForQR.upiProvider}</p>
                 <p className="qr-code-instruction">Scan this QR code to make payments</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Order Details Modal */}
+      {showOrderDetails && selectedOrder && (
+        <div className="modal-overlay-background" onClick={() => setShowOrderDetails(false)}>
+          <div className="order-details-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="order-details-modal-header">
+              <h3>Order Details - #{selectedOrder.orderId}</h3>
+              <button className="modal-close-button" onClick={() => setShowOrderDetails(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="order-details-modal-content">
+              {/* Order Status */}
+              <div className="order-detail-section">
+                <h4>Order Status</h4>
+                <div className="order-status-info">
+                  <span className={`order-status status-${selectedOrder.orderStatus.toLowerCase()}`}>
+                    {selectedOrder.orderStatus}
+                  </span>
+                  <span className="order-date-info">
+                    Ordered on {new Date(selectedOrder.orderDate).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+
+              {/* Items Ordered */}
+              <div className="order-detail-section">
+                <h4>Items Ordered</h4>
+                <div className="order-items-list">
+                  {selectedOrder.items.map((item, index) => (
+                    <div key={index} className="order-item-row">
+                      <div className="item-info">
+                        <span className="item-name">{item.name}</span>
+                        <span className="item-quantity">Qty: {item.quantity}</span>
+                      </div>
+                      <div className="item-pricing">
+                        <span className="item-price">₹{item.price} each</span>
+                        <span className="item-total">₹{item.total}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Payment Information */}
+              <div className="order-detail-section">
+                <h4>Payment Information</h4>
+                <div className="payment-info-grid">
+                  <div className="payment-info-item">
+                    <span className="info-label">Payment Mode:</span>
+                    <span className="info-value">{selectedOrder.paymentMode}</span>
+                  </div>
+                  <div className="payment-info-item">
+                    <span className="info-label">Payment Status:</span>
+                    <span className={`info-value payment-${selectedOrder.paymentStatus.toLowerCase()}`}>
+                      {selectedOrder.paymentStatus}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Delivery Information */}
+              <div className="order-detail-section">
+                <h4>Delivery Information</h4>
+                <div className="delivery-info">
+                  <div className="delivery-address">
+                    <strong>{selectedOrder.shippingAddress.fullName}</strong><br />
+                    {selectedOrder.shippingAddress.addressLine1}<br />
+                    {selectedOrder.shippingAddress.addressLine2}<br />
+                    {selectedOrder.shippingAddress.cityName}, {selectedOrder.shippingAddress.stateName} - {selectedOrder.shippingAddress.pinCode}<br />
+                    Phone: {selectedOrder.shippingAddress.phoneNumber}
+                  </div>
+                  <div className="delivery-status">
+                    {selectedOrder.orderStatus === 'Delivered' ? (
+                      <span className="delivered-info">
+                        <FaCheckCircle /> Delivered on {new Date(selectedOrder.deliveredDate).toLocaleDateString()}
+                      </span>
+                    ) : (
+                      <span className="expected-delivery">
+                        Expected delivery: {new Date(selectedOrder.deliveryDate).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Order Summary */}
+              <div className="order-detail-section">
+                <h4>Order Summary</h4>
+                <div className="order-summary">
+                  <div className="summary-row">
+                    <span>Subtotal:</span>
+                    <span>₹{selectedOrder.subtotal}</span>
+                  </div>
+                  <div className="summary-row">
+                    <span>Shipping:</span>
+                    <span>₹{selectedOrder.shipping}</span>
+                  </div>
+                  {selectedOrder.tax > 0 && (
+                    <div className="summary-row">
+                      <span>Tax:</span>
+                      <span>₹{selectedOrder.tax}</span>
+                    </div>
+                  )}
+                  {selectedOrder.discount > 0 && (
+                    <div className="summary-row discount">
+                      <span>Discount:</span>
+                      <span>-₹{selectedOrder.discount}</span>
+                    </div>
+                  )}
+                  <div className="summary-row total">
+                    <span>Total Amount:</span>
+                    <span>₹{selectedOrder.orderTotal}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="order-details-actions">
+                <button className="download-invoice-button" onClick={() => generateInvoicePDF(selectedOrder)}>
+                  <FaDownload /> Download Invoice
+                </button>
+                <button className="track-order-button" onClick={() => {
+                  setShowOrderDetails(false);
+                  handleTrackOrder(selectedOrder);
+                }}>
+                  <FaTruck /> Track Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Track Order Modal */}
+      {showTrackOrder && trackingOrder && (
+        <div className="modal-overlay-background" onClick={() => setShowTrackOrder(false)}>
+          <div className="track-order-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="track-order-modal-header">
+              <h3>Track Order - #{trackingOrder.orderId}</h3>
+              <button className="modal-close-button" onClick={() => setShowTrackOrder(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="track-order-modal-content">
+              <div className="tracking-header">
+                <div className="tracking-order-info">
+                  <h4>{trackingOrder.productName}</h4>
+                  <p>{trackingOrder.itemCount} item{trackingOrder.itemCount > 1 ? 's' : ''} • ₹{trackingOrder.orderTotal}</p>
+                </div>
+                <div className="tracking-expected-delivery">
+                  {trackingOrder.orderStatus === 'Delivered' ? (
+                    <span className="delivered-status">
+                      <FaCheckCircle /> Delivered on {new Date(trackingOrder.deliveredDate).toLocaleDateString()}
+                    </span>
+                  ) : (
+                    <span className="expected-status">
+                      Expected delivery: {new Date(trackingOrder.deliveryDate).toLocaleDateString()}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="tracking-timeline">
+                {trackingOrder.trackingInfo.map((track, index) => (
+                  <div key={index} className={`tracking-step ${track.completed ? 'completed' : 'pending'}`}>
+                    <div className="tracking-step-icon">
+                      {track.completed ? (
+                        <FaCheckCircle />
+                      ) : (
+                        <FaClock />
+                      )}
+                    </div>
+                    <div className="tracking-step-content">
+                      <div className="tracking-step-title">{track.status}</div>
+                      <div className="tracking-step-datetime">
+                        {track.date} • {track.time}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="tracking-delivery-address">
+                <h4>Delivery Address</h4>
+                <div className="address-info">
+                  <strong>{trackingOrder.shippingAddress.fullName}</strong><br />
+                  {trackingOrder.shippingAddress.addressLine1}<br />
+                  {trackingOrder.shippingAddress.addressLine2}<br />
+                  {trackingOrder.shippingAddress.cityName}, {trackingOrder.shippingAddress.stateName} - {trackingOrder.shippingAddress.pinCode}
+                </div>
               </div>
             </div>
           </div>

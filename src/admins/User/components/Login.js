@@ -35,24 +35,6 @@ const Login = ({ onClose }) => {
     setIsLoginView(true); // Switch to login view after signup
   };
 
-  const fillCredentials = (userType) => {
-    switch (userType) {
-      case 'superadmin':
-        setEmail('superadmin@dehydrate.com');
-        setPassword('Superadmin@123');
-        break;
-      case 'useradmin':
-        setEmail('useradmin@dehydrate.com');
-        setPassword('Useradmin@123');
-        break;
-      case 'user':
-        setEmail('user@admin.com');
-        setPassword('User@123');
-        break;
-      default:
-        break;
-    }
-  };
 
   return (
     <div className="login-modal-backdrop">

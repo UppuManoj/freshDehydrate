@@ -67,7 +67,7 @@ const Products = ({ onAddToCart, onToggleFavorite, favorites }) => {
     }
 
     return products;
-  }, [searchQuery, category, priceRange, sortOrder]);
+  }, [searchQuery, category, priceRange, sortOrder, getAvailableProducts]);
 
   // We are keeping the main page structure from the previous step,
   // but replacing the product grid's content with the new design.

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { salesData } from '../data/salesData';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { 
-  FaChartLine, 
   FaUsers, 
   FaShoppingCart, 
   FaRupeeSign,

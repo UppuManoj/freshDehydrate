@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
 import { ProductProvider } from '../../contexts/ProductContext';
 import { OrderProvider } from '../../contexts/OrderContext';
 import SystemSettings from './pages/SystemSettings';
@@ -20,7 +19,6 @@ import './components/AddProductModal.css';
 import '../../styles/AdminDashboard.css';
 
 function AdminApp() {
-  const { currentUser } = useAuth();
 
   return (
     <ProductProvider>

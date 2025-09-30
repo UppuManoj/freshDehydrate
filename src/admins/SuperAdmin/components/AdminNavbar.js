@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaUserCircle, FaHome, FaTachometerAlt, FaClipboardList, FaBoxes, FaUsers, FaChartLine, FaBars, FaTimes, FaChartBar } from 'react-icons/fa';
+import { FaUserCircle, FaTachometerAlt, FaClipboardList, FaBoxes, FaUsers, FaChartLine, FaBars, FaTimes, FaChartBar } from 'react-icons/fa';
 import './AdminNavbar.css';
 
 const AdminNavbar = ({ title = "Admin Dashboard" }) => {

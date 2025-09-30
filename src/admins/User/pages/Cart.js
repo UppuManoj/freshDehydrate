@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaTrash, FaArrowLeft } from 'react-icons/fa';
 import { useProducts } from '../../../contexts/ProductContext';
-import { useOrders } from '../../../contexts/OrderContext';
 import './Cart.css';
 
 const Cart = ({ cart, setCart, isLoggedIn, onLoginClick }) => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const { getAllProducts } = useProducts();
-  const { confirmOrder } = useOrders();
   const navigate = useNavigate();
 
   const cartItems = cart.reduce((acc, product) => {
@@ -68,17 +66,16 @@ const Cart = ({ cart, setCart, isLoggedIn, onLoginClick }) => {
         return;
       }
 
-      // Navigate to payments page with order data
+      // Navigate to address selection page with order data
       const orderData = {
         items: enrichedCartItems,
         subtotal: subtotal,
         shipping: shippingCost,
         tax: tax,
-        total: total,
-        shippingAddress: 'Default Address'
+        total: total
       };
 
-      navigate('/payments', { state: orderData });
+      navigate('/address-selection', { state: orderData });
       
     } catch (error) {
       console.error('Checkout error:', error);

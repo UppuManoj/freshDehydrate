@@ -65,7 +65,7 @@ const ProductManagement = () => {
   };
 
   const handleAddProduct = (productData) => {
-    const newProduct = addProduct(productData);
+    addProduct(productData);
     refreshProducts();
     setShowAddModal(false);
   };

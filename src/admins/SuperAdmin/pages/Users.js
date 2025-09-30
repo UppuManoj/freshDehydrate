@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useOrders } from '../../../contexts/OrderContext';
-import { useAuth } from '../../../contexts/AuthContext';
 import { FaUsers, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaShoppingCart, FaRupeeSign, FaSearch, FaFilter, FaEye, FaEdit, FaBan, FaCheckCircle, FaUserCog } from 'react-icons/fa';
 import './Users.css';
 
 const Users = () => {
-  const { orders, orderStats } = useOrders();
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
