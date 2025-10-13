@@ -47,7 +47,7 @@
 /* Stats Section */
 .stats-section {
   padding: 40px 15px;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   width: 100%;
   overflow-x: auto;
 }
@@ -206,7 +206,7 @@
 /* Testimonials Section */
 .testimonials-section {
   padding: 40px 20px;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
 }
 
 .testimonials-section h2 {
@@ -344,7 +344,7 @@
 /* Certifications Section */
 .certifications-section {
   padding: 40px 20px;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
 }
 
 .certifications-section h2 {
@@ -398,14 +398,14 @@
 /* Benefits Section */
 .benefits-section {
   padding: 40px 20px;
-  background: linear-gradient(135deg, #28a745, #20c997);
-  color: white;
+  background-color: #ffffff;
+  color: #343a40;
 }
 
 .benefits-content h2 {
   font-size: 2.2rem;
   margin-bottom: 50px;
-  color: white;
+  color: #343a40;
 }
 
 .benefits-grid {
@@ -417,30 +417,30 @@
 }
 
 .benefit-item {
-  background: rgba(255, 255, 255, 0.1);
+  background: #ffffff;
   padding: 30px;
   border-radius: 12px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #f1f3f4;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .benefit-item:hover {
   transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 .benefit-item h3 {
   font-size: 1.4rem;
   margin-bottom: 15px;
-  color: white;
+  color: #343a40;
   font-weight: 600;
 }
 
 .benefit-item p {
   font-size: 1rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
+  color: #6c757d;
   margin: 0;
 }
 
@@ -467,8 +467,9 @@
 .value-item {
   text-align: center;
   padding: 40px 30px;
-  background: #f8f9fa;
+  background: #ffffff;
   border-radius: 15px;
+  border: 1px solid #f1f3f4;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -500,7 +501,7 @@
 /* FAQ Section */
 .faq-section {
   padding: 40px 20px;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
 }
 
 .faq-section h2 {
@@ -546,7 +547,7 @@
 
 /* Updated CTA Section */
 .call-to-action-section {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   color: rgb(0, 0, 0);
   padding: 40px 20px;
 }

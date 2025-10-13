@@ -4,14 +4,21 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './Login.css';
 
 const Login = ({ onClose }) => {
-  const [isLoginView, setIsLoginView] = useState(true);
+  const [viewMode, setViewMode] = useState('login'); // 'login', 'signup', 'forgotPassword'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
   const { login } = useAuth();
 
   const handleLogin = async (e) => {
@@ -32,7 +39,72 @@ const Login = ({ onClose }) => {
   const handleSignup = (e) => {
     e.preventDefault();
     // In a real app, you would register the user
-    setIsLoginView(true); // Switch to login view after signup
+    setViewMode('login'); // Switch to login view after signup
+  };
+
+  const handleSendOTP = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    try {
+      // Simulate sending OTP
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // In a real app, you would send OTP to the registered email
+      setOtpSent(true);
+      setSuccess('OTP has been sent to your email');
+    } catch (err) {
+      setError('Failed to send OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    // Validate passwords match
+    if (newPassword !== confirmNewPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    // Validate password strength (optional)
+    if (newPassword.length < 8) {
+      setError('Password must be at least 8 characters long');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Simulate password reset
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // In a real app, you would verify OTP and reset password
+      setSuccess('Password reset successfully! Please login with your new password.');
+      
+      // Reset form and switch to login after 2 seconds
+      setTimeout(() => {
+        setViewMode('login');
+        setEmail('');
+        setOtp('');
+        setNewPassword('');
+        setConfirmNewPassword('');
+        setOtpSent(false);
+        setError('');
+        setSuccess('');
+      }, 2000);
+    } catch (err) {
+      setError('Failed to reset password. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
 
@@ -40,7 +112,8 @@ const Login = ({ onClose }) => {
     <div className="login-modal-backdrop">
       <div className="login-modal-content">
         <button className="close-modal-btn" onClick={onClose}>×</button>
-        {isLoginView ? (
+        
+        {viewMode === 'login' && (
           <form onSubmit={handleLogin} className="login-form">
             <h2>Login to Fresh Dehydrator</h2>
             {error && <p className="error-message">{error}</p>}
@@ -67,14 +140,19 @@ const Login = ({ onClose }) => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
+            <div className="forgot-password-link">
+              <span onClick={() => setViewMode('forgotPassword')}>Forgot Password?</span>
+            </div>
             <button type="submit" disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </button>
             
             
-            <p>Don't have an account? <span onClick={() => setIsLoginView(false)}>Sign up</span></p>
+            <p>Don't have an account? <span onClick={() => setViewMode('signup')}>Sign up</span></p>
           </form>
-        ) : (
+        )}
+
+        {viewMode === 'signup' && (
           <form onSubmit={handleSignup} className="signup-form">
             <h2>Sign Up</h2>
             <input type="text" placeholder="Full Name" required />
@@ -117,8 +195,87 @@ const Login = ({ onClose }) => {
               </button>
             </div>
             <button type="submit">Create Account</button>
-            <p>Already have an account? <span onClick={() => setIsLoginView(true)}>Login</span></p>
+            <p>Already have an account? <span onClick={() => setViewMode('login')}>Login</span></p>
           </form>
+        )}
+
+        {viewMode === 'forgotPassword' && (
+          <div className="forgot-password-form">
+            <h2>Reset Password</h2>
+            {error && <p className="error-message">{error}</p>}
+            {success && <p className="success-message">{success}</p>}
+            
+            {!otpSent ? (
+              <form onSubmit={handleSendOTP}>
+                <input
+                  type="email"
+                  placeholder="Registered Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <button type="submit" disabled={loading}>
+                  {loading ? 'Sending OTP...' : 'Send OTP'}
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleResetPassword}>
+                <input
+                  type="email"
+                  placeholder="Registered Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled
+                />
+                <input
+                  type="text"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  required
+                  maxLength="6"
+                />
+                <div className="password-input-container">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    placeholder="New Password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-btn"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                <div className="password-input-container">
+                  <input
+                    type={showConfirmNewPassword ? "text" : "password"}
+                    placeholder="Confirm New Password"
+                    value={confirmNewPassword}
+                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-btn"
+                    onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
+                  >
+                    {showConfirmNewPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                <button type="submit" disabled={loading}>
+                  {loading ? 'Resetting Password...' : 'Reset Password'}
+                </button>
+              </form>
+            )}
+            
+            <p>Remember your password? <span onClick={() => setViewMode('login')}>Back to Login</span></p>
+          </div>
         )}
       </div>
     </div>

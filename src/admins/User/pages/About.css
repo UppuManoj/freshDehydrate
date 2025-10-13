@@ -23,48 +23,51 @@
   line-height: 1.6;
 }
 
-.about-main-content {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 60px 20px;
-  gap: 60px;
-  flex-wrap: wrap;
+.about-page-main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
-.vision-mission-container {
-  flex: 1.2;
-  max-width: 600px;
+.about-vision-mission-container {
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.vision-mission-container h2 {
+.about-vision-mission-container h2 {
   font-size: 2.2rem;
   color: #333;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
-.vision-mission-item {
-  margin-bottom: 30px;
+.about-vision-mission-item {
+  margin-bottom: 25px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.vision-mission-item h3 {
+.about-vision-mission-item h3 {
   font-size: 1.5rem;
   color: #28a745; /* Green accent */
   margin-bottom: 10px;
 }
 
-.vision-mission-item p {
+.about-vision-mission-item p {
   font-size: 1.1rem;
   color: #6c757d;
   line-height: 1.7;
 }
 
-.stats-container {
-  flex: 1;
+.about-stats-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 25px;
-  max-width: 500px;
+  max-width: 1000px;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
 }
 
 .stat-card {
@@ -74,6 +77,11 @@
   border-radius: 8px;
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 150px;
 }
 
 .stat-card:hover {
@@ -154,14 +162,19 @@
 
 /* Responsive Design */
 @media (max-width: 992px) {
-  .about-main-content {
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
+  .about-page-main-content {
+    padding: 50px 20px;
   }
 
-  .vision-mission-container {
-    text-align: center;
+  .about-vision-mission-container {
+    margin-bottom: 50px;
+  }
+
+  .about-stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 35px 20px;
+    justify-content: center;
   }
 
   .team-members,
@@ -215,6 +228,7 @@
 
   .stat-card {
     padding: 20px;
+    min-height: 130px;
   }
 
   .team-member {
@@ -224,7 +238,7 @@
 
 /* Team Section */
 .team-section {
-  padding: 60px 20px;
+  padding: 40px 20px;
   text-align: center;
 }
 
@@ -243,7 +257,7 @@
 .team-members {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 25px;
   flex-wrap: wrap;
 }
 
@@ -290,7 +304,7 @@
 
 /* Core Values Section */
 .core-values-section {
-  padding: 60px 20px;
+  padding: 40px 20px;
   text-align: center;
   background-color: #f8f9fa;
 }
@@ -298,13 +312,13 @@
 .core-values-section h2 {
   font-size: 2.2rem;
   color: #333;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .core-values {
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 30px;
   flex-wrap: wrap;
 }
 
@@ -329,16 +343,10 @@
   line-height: 1.6;
 }
 
-/* Responsive Design */
+/* Additional responsive adjustments */
 @media (max-width: 1024px) {
-  .about-main-content {
+  .about-page-main-content {
     padding: 50px 20px;
-    gap: 40px;
-  }
-
-  .company-image-container {
-    flex: 1;
-    max-width: 450px;
   }
 
   .team-section {
@@ -365,47 +373,37 @@
     max-width: 600px;
   }
 
-  .about-main-content {
+  .about-page-main-content {
     padding: 40px 15px;
-    gap: 30px;
-    flex-direction: column;
-    align-items: center;
   }
 
-  .vision-mission-container {
-    flex: none;
-    max-width: 100%;
-    order: 2;
+  .about-vision-mission-container {
+    margin-bottom: 40px;
   }
 
-  .vision-mission-container h2 {
+  .about-vision-mission-container h2 {
     font-size: 2rem;
     margin-bottom: 25px;
-    text-align: center;
   }
 
-  .vision-mission-item {
+  .about-vision-mission-item {
     margin-bottom: 25px;
   }
 
-  .vision-mission-item h3 {
+  .about-vision-mission-item h3 {
     font-size: 1.4rem;
     margin-bottom: 12px;
   }
 
-  .vision-mission-item p {
+  .about-vision-mission-item p {
     font-size: 0.95rem;
   }
 
-  .company-image-container {
-    flex: none;
-    max-width: 100%;
-    order: 1;
-  }
-
-  .company-image-container img {
-    width: 100%;
-    max-width: 400px;
+  .about-stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 30px 15px;
+    justify-content: center;
   }
 
   .team-section {
@@ -494,32 +492,39 @@
     padding: 0 10px;
   }
 
-  .about-main-content {
+  .about-page-main-content {
     padding: 30px 10px;
-    gap: 25px;
   }
 
-  .vision-mission-container h2 {
+  .about-vision-mission-container {
+    margin-bottom: 30px;
+  }
+
+  .about-vision-mission-container h2 {
     font-size: 1.8rem;
     margin-bottom: 20px;
   }
 
-  .vision-mission-item {
+  .about-vision-mission-item {
     margin-bottom: 20px;
   }
 
-  .vision-mission-item h3 {
+  .about-vision-mission-item h3 {
     font-size: 1.3rem;
     margin-bottom: 10px;
   }
 
-  .vision-mission-item p {
+  .about-vision-mission-item p {
     font-size: 0.9rem;
     line-height: 1.5;
   }
 
-  .company-image-container img {
-    max-width: 100%;
+  .about-stats-container {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 25px 10px;
+    justify-content: center;
+    max-width: 400px;
   }
 
   .team-section {
@@ -612,20 +617,31 @@
     padding: 0 5px;
   }
 
-  .about-main-content {
+  .about-page-main-content {
     padding: 25px 8px;
   }
 
-  .vision-mission-container h2 {
+  .about-vision-mission-container {
+    margin-bottom: 25px;
+  }
+
+  .about-vision-mission-container h2 {
     font-size: 1.6rem;
   }
 
-  .vision-mission-item h3 {
+  .about-vision-mission-item h3 {
     font-size: 1.2rem;
   }
 
-  .vision-mission-item p {
+  .about-vision-mission-item p {
     font-size: 0.85rem;
+  }
+
+  .about-stats-container {
+    gap: 10px;
+    padding: 20px 8px;
+    justify-content: center;
+    max-width: 350px;
   }
 
   .team-section {

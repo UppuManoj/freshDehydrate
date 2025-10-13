@@ -10,20 +10,20 @@ const About = () => {
         <p>Born from a passion for healthy living and sustainable practices, Fresh Dehydrate transforms the finest produce into nutritious, delicious snacks that fuel your active lifestyle.</p>
       </header>
 
-      <main className="about-main-content">
-        <div className="vision-mission-container">
+      <main className="about-page-main-content">
+        <div className="about-vision-mission-container">
           <h2>Our Vision & Mission</h2>
-          <div className="vision-mission-item">
+          <div className="about-vision-mission-item">
             <h3>Vision</h3>
             <p>To be the leading provider of premium dehydrated foods that make healthy eating convenient, delicious, and sustainable for everyone.</p>
           </div>
-          <div className="vision-mission-item">
+          <div className="about-vision-mission-item">
             <h3>Mission</h3>
             <p>We preserve nature's goodness through careful dehydration techniques, creating nutrient-dense snacks that support healthy lifestyles while promoting sustainable farming practices.</p>
           </div>
         </div>
 
-        <div className="stats-container">
+        <div className="about-stats-container">
           <div className="stat-card">
             <FiHeart className="stat-icon" />
             <h4>100% Natural</h4>
@@ -41,11 +41,11 @@ const About = () => {
           </div>
           <div className="stat-card">
             <FiClock className="stat-icon" />
-            <h4>5+ Years</h4>
+            <h4>2+ Years</h4>
             <p>Experience</p>
           </div>
         </div>
-      </main>
+      </main> 
 
       <section className="team-section">
         <h2>Meet Our Team</h2>
@@ -61,11 +61,11 @@ const About = () => {
             <img src="" alt="Jaswanth" />
             <h4>Jaswanth kumar</h4>
             <p className="role">Head of Operations</p>
-            <p>15+ years experience in food processing and quality control.</p>
+            <p>2+ years experience in food processing and quality control.</p>
           </div>
           <div className="team-member">
-            <img src="" alt="Sairam" />
-            <h4>sairam</h4>
+            <img src="" alt="Pandu" />
+            <h4>Pandu</h4>
             <p className="role">Nutritionist</p>
             <p>Certified nutritionist ensuring our products meet the highest standards.</p>
           </div>

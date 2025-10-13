@@ -37,7 +37,7 @@ import {
 } from 'react-icons/fa';
 import './Profile.css';
 
-const UserProfileDashboard = () => {
+const UserProfileDashboard = ({ favorites = [], onToggleFavorite, onAddToCart }) => {
   const { logout } = useAuth();
   const { orderStats } = useOrders();
   const { 
@@ -356,8 +356,7 @@ const UserProfileDashboard = () => {
       tabId: 'wishlistItems', 
       tabIcon: <FaHeart />, 
       tabTitle: 'My Wishlist', 
-      tabSubtitle: 'Your favorite products',
-      actionHandler: () => navigate('/favorites')
+      tabSubtitle: `${favorites.length} saved items`
     },
     { 
       tabId: 'giftCardsVouchers', 
@@ -747,6 +746,49 @@ const UserProfileDashboard = () => {
     </div>
   );
 
+  const renderWishlistSection = () => (
+    <div className="wishlist-section">
+      <div className="wishlist-header">
+        <h2>My Wishlist</h2>
+        <span className="wishlist-count">{favorites.length} item{favorites.length !== 1 ? 's' : ''}</span>
+      </div>
+      {favorites.length === 0 ? (
+        <div className="wishlist-empty">
+          <FaHeart size={48} />
+          <h3>No items in wishlist</h3>
+          <p>Save products you love and add them to cart anytime.</p>
+          <button className="start-shopping-button" onClick={() => navigate('/products')}>Browse Products</button>
+        </div>
+      ) : (
+        <div className="wishlist-grid">
+          {favorites.map(product => (
+            <div key={product.id} className="wishlist-card">
+              <div className="wishlist-image">
+                <img src={product.image} alt={product.name} />
+                {onToggleFavorite && (
+                  <button className="wishlist-remove" onClick={() => onToggleFavorite(product)}>
+                    <FaTimes />
+                  </button>
+                )}
+              </div>
+              <div className="wishlist-info">
+                <div className="wishlist-name">{product.name}</div>
+                {product.price != null && (
+                  <div className="wishlist-price">₹{Number(product.price).toLocaleString()}</div>
+                )}
+                {onAddToCart && (
+                  <button className="wishlist-add-to-cart" onClick={() => onAddToCart(product)}>
+                    <FaShoppingCart /> Add to Cart
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
   const renderTabContent = () => {
     switch (currentActiveTab) {
       case 'dashboard':
@@ -757,6 +799,8 @@ const UserProfileDashboard = () => {
         return renderPaymentMethodsSection();
       case 'addressBook':
         return renderAddressBookSection();
+      case 'wishlistItems':
+        return renderWishlistSection();
       case 'giftCardsVouchers':
         return (
           <div className="tab-content-section">
@@ -808,11 +852,7 @@ const UserProfileDashboard = () => {
                 key={menuItem.tabId}
                 className={`navigation-menu-item ${currentActiveTab === menuItem.tabId ? 'active' : ''}`}
                 onClick={() => {
-                  if (menuItem.actionHandler) {
-                    menuItem.actionHandler();
-                  } else {
-                    setCurrentActiveTab(menuItem.tabId);
-                  }
+                  setCurrentActiveTab(menuItem.tabId);
                 }}
               >
                 <div className="menu-item-content-wrapper">

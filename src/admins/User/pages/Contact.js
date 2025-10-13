@@ -82,8 +82,8 @@ const Contact = () => {
             <FiPhone className="info-icon" />
             <div>
               <h4>Call Us</h4>
-              <p>+91 6303060469</p>
-              <p>+91 8464936840</p>
+              <p>+91 6303458469</p>
+              <p>+91 8464934587</p>
             </div>
           </div>
           <div className="info-card">

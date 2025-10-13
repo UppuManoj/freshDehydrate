@@ -14,7 +14,6 @@ import ProductDetail from './pages/ProductDetail';
 import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import Payments from './pages/Payments';
-import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';
 import AddressSelection from './pages/AddressSelection';
 import OrderSuccess from './pages/OrderSuccess';
@@ -58,7 +57,6 @@ function AppContent() {
         isLoggedIn={!!currentUser} 
         username={currentUser?.name || "Guest"} 
         cartCount={cart.length} 
-        favoritesCount={favorites.length}
         onLoginClick={() => setShowLogin(true)}
       />
       <main className="main-content">
@@ -72,8 +70,7 @@ function AppContent() {
           <Route path="/address-selection" element={<AddressSelection />} />
           <Route path="/payments" element={<Payments clearCart={clearCart} />} />
           <Route path="/order-success" element={<OrderSuccess clearCart={clearCart} />} />
-          <Route path="/favorites" element={<Favorites favorites={favorites} onToggleFavorite={toggleFavorite} onAddToCart={addToCart} />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile favorites={favorites} onToggleFavorite={toggleFavorite} onAddToCart={addToCart} />} />
         </Routes>
       </main>
       <Footer />

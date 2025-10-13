@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaShoppingCart, FaHeart, FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
+import { FaShoppingCart, FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
 import './Navbar.css';
 
-const Navbar = ({ isLoggedIn, onLoginClick, onLogout, username, cartCount, favoritesCount }) => {
+const Navbar = ({ isLoggedIn, onLoginClick, onLogout, username, cartCount }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -36,10 +36,6 @@ const Navbar = ({ isLoggedIn, onLoginClick, onLogout, username, cartCount, favor
 
       <div className="navbar-right">
         <div className="navbar-icons">
-          <NavLink to="/favorites" className="icon-link favorites-icon-container">
-            <FaHeart />
-            {typeof favoritesCount === 'number' && <span className="favorites-count">{favoritesCount}</span>}
-          </NavLink>
           <NavLink to="/cart" className="icon-link cart-icon-container">
             <FaShoppingCart />
             {typeof cartCount === 'number' && <span className="cart-count">{cartCount}</span>}
