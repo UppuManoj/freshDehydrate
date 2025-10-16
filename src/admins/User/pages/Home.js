@@ -249,7 +249,7 @@ const Home = () => {
           </div>
           <div className="faq-item">
             <h3>Do you offer bulk discounts?</h3>
-            <p>Yes! We offer attractive discounts for bulk orders. Contact our sales team for custom pricing on orders over ₹5000.</p>
+            <p>Yes! We offer attractive discounts for bulk orders. Contact our sales team for custom pricing on orders over ₹10000.</p>
           </div>
         </div>
       </section>
